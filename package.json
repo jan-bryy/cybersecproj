@@ -12,6 +12,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.1",
+    "@capacitor/cli": "^8.5.1",
+    "@capacitor/core": "^8.5.1",
     "@ionic/react": "^9.0.0",
     "@ionic/react-router": "^9.0.0",
     "ionicons": "^8.1.0",
