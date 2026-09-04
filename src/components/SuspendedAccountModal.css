@@ -1,0 +1,86 @@
+/* src/components/SuspendedAccountModal.css */
+.suspended-modal {
+    --width: 320px;
+    --height: auto;
+    --border-radius: 24px;
+}
+
+.suspended-modal-content {
+    padding: 32px 24px 24px;
+    text-align: center;
+}
+
+.suspended-icon-wrapper {
+    margin-bottom: 12px;
+}
+
+.suspended-icon {
+    font-size: 56px;
+    color: #ee4d2d;
+    /* Shopee orange */
+}
+
+.suspended-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.suspended-description {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.suspended-info-box {
+    background: #fdece7;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.suspended-info-title {
+    color: #ee4d2d;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.suspended-info-box ul {
+    padding-left: 18px;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.suspended-btn-outline {
+    width: 100%;
+    background: white;
+    border: 1px solid #ee4d2d;
+    color: #ee4d2d;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.suspended-btn-filled {
+    width: 100%;
+    background: #ee4d2d;
+    color: white;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.suspended-btn-outline-plain {
+    width: 100%;
+    background: white;
+    border: 1px solid #ee4d2d;
+    color: #ee4d2d;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 20px;
+}
