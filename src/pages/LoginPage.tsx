@@ -6,7 +6,7 @@ import { personOutline, lockClosedOutline } from 'ionicons/icons';
 import SuspendedAccountModal from '../components/SuspendedAccountModal';
 import './LoginPage.css';
 
-const SUSPENDED_TEST_EMAIL = 'suspended@test.com';
+const SUSPENDED_TEST_EMAIL = 'suspended@gmail.com';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
