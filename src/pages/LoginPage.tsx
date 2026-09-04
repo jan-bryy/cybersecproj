@@ -28,9 +28,6 @@ const LoginPage: React.FC = () => {
         <div className="login-container">
           <div className="login-logo-wrapper">
             <div className="login-logo-bag">🛍️</div>
-            <h1 className="login-logo-text">
-              <span className="login-logo-shopee">Shopee</span>
-            </h1>
           </div>
 
           <div className="login-form">
