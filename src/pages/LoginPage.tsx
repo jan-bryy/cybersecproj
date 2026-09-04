@@ -27,7 +27,9 @@ const LoginPage: React.FC = () => {
       <IonContent fullscreen className="login-content">
         <div className="login-container">
           <div className="login-logo-wrapper">
-            <div className="login-logo-bag">🛍️</div>
+            <div className="login-logo-bag">
+                <img src="/shopeeicon.png" alt="Shopee" className="login-logo-img" />
+            </div>
           </div>
 
           <div className="login-form">
