@@ -1,147 +1,31 @@
-/* src/pages/LoginPage.css */
-.login-content {
-    --background: #ffffff;
-}
-
-.login-container {
-    max-width: 360px;
-    margin: 0 auto;
-    padding: 48px 24px 24px;
+/* src/pages/LoginPage.css — replace the old .login-input rule with these */
+.login-input-wrapper {
+    position: relative;
     display: flex;
-    flex-direction: column;
+    align-items: center;
 }
 
-.login-logo-wrapper {
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.login-logo-bag {
-    font-size: 48px;
-    margin-bottom: 8px;
-}
-
-.login-logo-text {
-    margin: 0;
-}
-
-.login-logo-shopee {
-    color: #ee4d2d;
-    font-weight: 800;
-    font-size: 28px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.login-input-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 18px;
+    color: #999;
+    pointer-events: none;
 }
 
 .login-input {
     width: 100%;
-    padding: 14px 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    padding: 14px 16px 14px 40px;
+    /* extra left padding for the icon */
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0;
     font-size: 14px;
-    background: #fafafa;
+    background: transparent;
     box-sizing: border-box;
     outline: none;
 }
 
 .login-input:focus {
-    border-color: #ee4d2d;
-    background: #ffffff;
-}
-
-.login-btn {
-    width: 100%;
-    padding: 14px;
-    background: #ee4d2d;
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    border: none;
-    border-radius: 8px;
-    margin-top: 8px;
-    cursor: pointer;
-}
-
-.login-btn:active {
-    background: #d8451f;
-}
-
-.login-links {
-    text-align: right;
-    margin-top: -4px;
-}
-
-.login-link {
-    color: #757575;
-    font-size: 13px;
-    text-decoration: none;
-}
-
-.login-divider {
-    text-align: center;
-    color: #999;
-    font-size: 12px;
-    margin: 28px 0 16px;
-    position: relative;
-}
-
-.login-divider::before,
-.login-divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 30%;
-    height: 1px;
-    background: #e0e0e0;
-}
-
-.login-divider::before {
-    left: 0;
-}
-
-.login-divider::after {
-    right: 0;
-}
-
-.login-social {
-    display: flex;
-    gap: 12px;
-}
-
-.social-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    border: 1px solid #e0e0e0;
-    background: white;
-    cursor: pointer;
-}
-
-.facebook-btn {
-    color: #1877f2;
-}
-
-.google-btn {
-    color: #333;
-}
-
-.login-signup {
-    text-align: center;
-    margin-top: 32px;
-    font-size: 13px;
-    color: #757575;
-}
-
-.login-link-bold {
-    color: #ee4d2d;
-    font-weight: 700;
-    text-decoration: none;
+    border-bottom-color: #ee4d2d;
 }

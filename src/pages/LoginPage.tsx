@@ -1,7 +1,8 @@
 // src/pages/LoginPage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IonPage, IonContent } from '@ionic/react';
+import { IonPage, IonContent, IonIcon } from '@ionic/react';
+import { personOutline, lockClosedOutline } from 'ionicons/icons';
 import SuspendedAccountModal from '../components/SuspendedAccountModal';
 import './LoginPage.css';
 
@@ -33,20 +34,27 @@ const LoginPage: React.FC = () => {
           </div>
 
           <div className="login-form">
-            <input
-              className="login-input"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              className="login-input"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="login-input-wrapper">
+              <IonIcon icon={personOutline} className="login-input-icon" />
+              <input
+                className="login-input"
+                type="email"
+                placeholder="No. Handphone/Email/Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="login-input-wrapper">
+              <IonIcon icon={lockClosedOutline} className="login-input-icon" />
+              <input
+                className="login-input"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
             <button className="login-btn" onClick={handleLogin}>
               LOG IN
