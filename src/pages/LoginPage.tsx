@@ -1,6 +1,6 @@
 // src/pages/LoginPage.tsx
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IonPage, IonContent } from '@ionic/react';
 import SuspendedAccountModal from '../components/SuspendedAccountModal';
 import './LoginPage.css';
@@ -8,7 +8,7 @@ import './LoginPage.css';
 const SUSPENDED_TEST_EMAIL = 'suspended@test.com';
 
 const LoginPage: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showSuspendedModal, setShowSuspendedModal] = useState(false);
@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
       setShowSuspendedModal(true);
       return;
     }
-    history.push('/app/home');
+    navigate('/app/home');
   };
 
   return (
