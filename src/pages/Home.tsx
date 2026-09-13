@@ -3,6 +3,7 @@ import { IonPage, IonContent, IonIcon, IonBadge } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import { searchOutline, cameraOutline, chatbubblesOutline, cartOutline } from 'ionicons/icons';
 import { useCart, Product } from '../context/CartContext';
+import { useState } from 'react';
 import './Home.css';
 
 const MOCK_PRODUCTS: Product[] = [
@@ -27,13 +28,14 @@ const MOCK_VIDEOS = [
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { addToCart, totalItems } = useCart();
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <IonPage>
       <IonContent fullscreen className="home-content">
         {/* Top orange header with search bar */}
         <div className="home-header">
-          <div className="home-search-bar">
+          <div className="home-search-bar" onClick={() => navigate('/search')}>
             <IonIcon icon={searchOutline} className="home-search-icon" />
             <span className="home-search-placeholder">Search products</span>
             <IonIcon icon={cameraOutline} className="home-camera-icon" />

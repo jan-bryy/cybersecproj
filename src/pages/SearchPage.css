@@ -1,0 +1,97 @@
+/* src/pages/SearchPage.css */
+.search-content {
+    --background: #ffffff;
+}
+
+.search-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-back-icon {
+    font-size: 22px;
+    color: #333;
+    flex-shrink: 0;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #ee4d2d;
+    border-radius: 20px;
+    padding: 8px 12px;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #bbb;
+}
+
+.search-input-icons {
+    display: flex;
+    gap: 10px;
+    color: #999;
+    font-size: 17px;
+}
+
+.search-go-btn {
+    flex-shrink: 0;
+    background: #ee4d2d;
+    border: none;
+    color: white;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.search-suggestions {
+    padding: 16px 12px;
+}
+
+.search-suggestions-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0 0 12px;
+}
+
+.search-suggestions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.suggestion-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.suggestion-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.suggestion-name {
+    padding: 8px;
+    font-size: 13px;
+    text-align: center;
+    margin: 0;
+}

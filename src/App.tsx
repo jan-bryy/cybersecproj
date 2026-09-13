@@ -16,6 +16,7 @@ import LoginPage from './pages/LoginPage';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Account from './pages/Account';
+import SearchPage from './pages/SearchPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -55,6 +56,7 @@ const App: React.FC = () => (
               <Route path="home" element={<Home />} />
               <Route path="cart" element={<Cart />} />
               <Route path="account" element={<Account />} />
+              <Route path="search" element={<SearchPage />} />
               <Route path="" element={<Navigate to="home" replace />} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
