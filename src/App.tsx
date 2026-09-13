@@ -45,9 +45,8 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         {/* Splash shown once on app load, then auto-navigates to /login */}
         <Route path="/splash" element={<SplashPage />} />
-
-        {/* Login lives outside the tabs no tab bar visible here */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/search" element={<SearchPage />} />
 
         {/* Everything under /app has the tab bar */}
         <Route path="/app/*" element={
@@ -56,7 +55,6 @@ const App: React.FC = () => (
               <Route path="home" element={<Home />} />
               <Route path="cart" element={<Cart />} />
               <Route path="account" element={<Account />} />
-              <Route path="search" element={<SearchPage />} />
               <Route path="" element={<Navigate to="home" replace />} />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
