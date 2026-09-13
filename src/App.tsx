@@ -11,6 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { homeOutline, cartOutline, personOutline } from 'ionicons/icons';
+import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
@@ -41,7 +42,10 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        {/* Login lives outside the tabs — no tab bar visible here */}
+        {/* Splash shown once on app load, then auto-navigates to /login */}
+        <Route path="/splash" element={<SplashPage />} />
+
+        {/* Login lives outside the tabs no tab bar visible here */}
         <Route path="/login" element={<LoginPage />} />
 
         {/* Everything under /app has the tab bar */}
@@ -69,9 +73,9 @@ const App: React.FC = () => (
             </IonTabBar>
           </IonTabs>
         } />
-
-        {/* Default route — send to login for now */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        
+        {/* Default route redirects to /splash */}
+        <Route path="/" element={<Navigate to="/splash" replace />} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
