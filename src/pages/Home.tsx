@@ -28,14 +28,13 @@ const MOCK_VIDEOS = [
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { addToCart, totalItems } = useCart();
-  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <IonPage>
       <IonContent fullscreen className="home-content">
         {/* Top orange header with search bar */}
         <div className="home-header">
-          <div className="home-search-bar" onClick={() => navigate('/search')}>
+          <div className="home-search-bar" onClick={() => navigate('/app/SearchPage')}>
             <IonIcon icon={searchOutline} className="home-search-icon" />
             <span className="home-search-placeholder">Search products</span>
             <IonIcon icon={cameraOutline} className="home-camera-icon" />
