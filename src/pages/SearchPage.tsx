@@ -20,7 +20,7 @@ const SearchPage: React.FC = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Redmi Note 14 Case"
+              placeholder="Glasses"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
