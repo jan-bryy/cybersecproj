@@ -45,6 +45,8 @@
     color: white;
     font-size: 24px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .home-cart-badge {
@@ -59,6 +61,8 @@
 .home-chat-icon {
     color: white;
     font-size: 24px;
+    display: flex;
+    align-items: center;
 }
 
 /* Promo strip */
