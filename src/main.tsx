@@ -14,4 +14,4 @@ root.render(
       </CartProvider>
     </AuthProvider>
   </React.StrictMode>
-);
+);  

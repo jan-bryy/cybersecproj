@@ -17,6 +17,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Account from './pages/Account';
 import SearchPage from './pages/SearchPage';
+import RequireAuth from './components/RequireAuth';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,30 +49,32 @@ const App: React.FC = () => (
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
 
-        {/* Everything under /app has the tab bar */}
+        {/* Everything under /app has the tab bar — now guarded */}
         <Route path="/app/*" element={
-          <IonTabs>
-            <IonRouterOutlet>
-              <Route path="home" element={<Home />} />
-              <Route path="cart" element={<Cart />} />
-              <Route path="account" element={<Account />} />
-              <Route path="" element={<Navigate to="home" replace />} />
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="home" href="/app/home">
-                <IonIcon aria-hidden="true" icon={homeOutline} />
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="cart" href="/app/cart">
-                <IonIcon aria-hidden="true" icon={cartOutline} />
-                <IonLabel>Cart</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="account" href="/app/account">
-                <IonIcon aria-hidden="true" icon={personOutline} />
-                <IonLabel>Account</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+          <RequireAuth>
+            <IonTabs>
+              <IonRouterOutlet>
+                <Route path="home" element={<Home />} />
+                <Route path="cart" element={<Cart />} />
+                <Route path="account" element={<Account />} />
+                <Route path="" element={<Navigate to="home" replace />} />
+              </IonRouterOutlet>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="home" href="/app/home">
+                  <IonIcon aria-hidden="true" icon={homeOutline} />
+                  <IonLabel>Home</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="cart" href="/app/cart">
+                  <IonIcon aria-hidden="true" icon={cartOutline} />
+                  <IonLabel>Cart</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="account" href="/app/account">
+                  <IonIcon aria-hidden="true" icon={personOutline} />
+                  <IonLabel>Account</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            </IonTabs>
+          </RequireAuth>
         } />
         
         {/* Default route redirects to /splash */}

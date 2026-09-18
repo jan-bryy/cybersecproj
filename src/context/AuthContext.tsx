@@ -12,6 +12,7 @@ interface AuthUser {
 interface AuthContextType {
   currentUser: AuthUser | null;
   token: string | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<LoginResult>;
   logout: () => void;
 }
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem(USER_STORAGE_KEY);
@@ -38,6 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem(TOKEN_STORAGE_KEY);
       }
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string): Promise<LoginResult> => {
@@ -73,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, token, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, token, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
