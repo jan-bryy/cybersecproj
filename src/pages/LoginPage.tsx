@@ -4,21 +4,40 @@ import { useNavigate } from 'react-router-dom';
 import { IonPage, IonContent, IonIcon } from '@ionic/react';
 import { personOutline, lockClosedOutline } from 'ionicons/icons';
 import SuspendedAccountModal from '../components/SuspendedAccountModal';
+import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
-
-const SUSPENDED_TEST_EMAIL = 'suspended@gmail.com';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showSuspendedModal, setShowSuspendedModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (email === SUSPENDED_TEST_EMAIL) {
+  const handleLogin = async () => {
+    setErrorMessage('');
+    setIsLoading(true);
+
+    const result = await login(email, password);
+    setIsLoading(false);
+
+    if (result === 'suspended') {
       setShowSuspendedModal(true);
       return;
     }
+
+    if (result === 'invalid') {
+      setErrorMessage('Incorrect email or password.');
+      return;
+    }
+
+    if (result === 'error') {
+      setErrorMessage('Something went wrong. Please try again.');
+      return;
+    }
+
     navigate('/app/home');
   };
 
@@ -55,8 +74,10 @@ const LoginPage: React.FC = () => {
               />
             </div>
 
-            <button className="login-btn" onClick={handleLogin}>
-              LOG IN
+            {errorMessage && <p className="login-error">{errorMessage}</p>}
+
+            <button className="login-btn" onClick={handleLogin} disabled={isLoading}>
+              {isLoading ? 'LOGGING IN...' : 'LOG IN'}
             </button>
 
             <div className="login-links">
@@ -74,7 +95,8 @@ const LoginPage: React.FC = () => {
           </div>
 
           <div className="login-signup">
-            Don't have an account? <a href="#" className="login-link-bold">Sign Up</a>
+            Don't have an account?{' '}
+            <span className="login-link-bold login-link-disabled">Sign Up</span>
           </div>
         </div>
 

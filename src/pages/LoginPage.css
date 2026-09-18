@@ -74,6 +74,12 @@
     border-bottom-color: #ee4d2d;
 }
 
+.login-error {
+    color: #ee4d2d;
+    font-size: 13px;
+    margin: -8px 0 0;
+}
+
 .login-btn {
     width: 100%;
     padding: 14px;
@@ -90,6 +96,11 @@
 
 .login-btn:active {
     background: #d8451f;
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .login-links {
@@ -164,4 +175,9 @@
     color: #ee4d2d;
     font-weight: 700;
     text-decoration: none;
+}
+
+.login-link-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
