@@ -1,20 +1,29 @@
+// src/pages/SplashPage.tsx
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IonPage, IonContent } from '@ionic/react';
+import { useAuth } from '../context/AuthContext';
 import './SplashPage.css';
 
 const SPLASH_DURATION = 2000; // ms
 
 const SplashPage: React.FC = () => {
   const navigate = useNavigate();
+  const { currentUser, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading) return; // wait until the localStorage check finishes
+
     const timer = setTimeout(() => {
-      navigate('/login', { replace: true });
+      if (currentUser) {
+        navigate('/app/home', { replace: true });
+      } else {
+        navigate('/login', { replace: true });
+      }
     }, SPLASH_DURATION);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, currentUser, isLoading]);
 
   return (
     <IonPage>
