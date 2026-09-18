@@ -1,0 +1,328 @@
+/* src/pages/Account.css */
+.account-content {
+    --background: #f5f5f5;
+}
+
+.account-header {
+    background: #ee4d2d;
+    padding: 16px 12px;
+}
+
+.account-header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.account-avatar {
+    font-size: 44px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.account-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.account-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.account-name {
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.account-tier-badge {
+    background: white;
+    color: #333;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.account-follow-row {
+    display: flex;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.account-header-icon {
+    color: white;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.account-cart-icon {
+    position: relative;
+}
+
+.account-cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: white;
+    color: #ee4d2d;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-vip-banner {
+    background: linear-gradient(90deg, #fff3d6, #ffe0b0);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a4a12;
+}
+
+.account-vip-badge {
+    background: #8a5a2b;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.account-vip-text {
+    flex: 1;
+}
+
+.account-section {
+    background: white;
+    margin: 8px;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.account-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.account-section-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.account-section-link {
+    font-size: 12px;
+    color: #757575;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.account-purchases-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.account-purchase-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #333;
+}
+
+.account-purchase-item ion-icon {
+    font-size: 24px;
+}
+
+.account-divider {
+    height: 1px;
+    background: #eee;
+    margin: 12px 0;
+}
+
+.account-load-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.account-load-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.account-load-label ion-icon {
+    color: #ee4d2d;
+    font-size: 18px;
+}
+
+.account-load-deal {
+    color: #ee4d2d;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.account-explore-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.account-explore-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+}
+
+.account-explore-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.account-explore-vip {
+    background: #8a6a2b;
+}
+
+.account-explore-orange {
+    background: #ee4d2d;
+}
+
+.account-explore-red {
+    background: #b3261e;
+}
+
+.account-explore-label {
+    font-size: 11px;
+    color: #333;
+}
+
+.account-explore-sub {
+    font-size: 10px;
+    color: #ee4d2d;
+}
+
+.account-wallet-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.account-wallet-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.account-wallet-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    color: #333;
+}
+
+.account-wallet-item span {
+    font-size: 12px;
+    color: #333;
+}
+
+.account-wallet-cta {
+    color: #ee4d2d !important;
+    font-size: 10px !important;
+}
+
+.account-wallet-btn {
+    border: 1px solid #ee4d2d;
+    color: #ee4d2d;
+    background: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.account-financial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.account-financial-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.account-financial-card-wide {
+    grid-column: 1 / -1;
+}
+
+.account-financial-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.account-financial-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.account-financial-sub {
+    font-size: 11px;
+    color: #ee4d2d;
+    margin: 2px 0 0;
+}

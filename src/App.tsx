@@ -18,6 +18,7 @@ import Cart from './pages/Cart';
 import Account from './pages/Account';
 import SearchPage from './pages/SearchPage';
 import RequireAuth from './components/RequireAuth';
+import SettingsPage from './pages/SettingsPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,8 +49,9 @@ const App: React.FC = () => (
         <Route path="/splash" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
 
-        {/* Everything under /app has the tab bar — now guarded */}
+        {/* Everything under /app has the tab bar, now guarded */}
         <Route path="/app/*" element={
           <RequireAuth>
             <IonTabs>
