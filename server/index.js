@@ -1,22 +1,24 @@
 // server/index.js
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-const authRoutes = require('./routes/auth');
-const productRoutes = require('./routes/products');
+const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/products");
 
 const app = express();
+app.set("trust proxy", 1); // <-- add this line
+
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
 app.listen(PORT, () => {
