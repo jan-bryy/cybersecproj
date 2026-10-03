@@ -80,7 +80,7 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
           className="suspended-btn-filled"
           onClick={onClose}
         >
-          Try Again
+          Close
         </button>
         <button
           type="button"
