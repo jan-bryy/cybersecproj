@@ -75,3 +75,21 @@
     text-align: center;
     margin: 0;
 }
+
+.search-status {
+    text-align: center;
+    padding: 32px 16px;
+    color: #757575;
+    font-size: 13px;
+}
+
+.search-retry {
+    margin-top: 8px;
+    background: #ee4d2d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
