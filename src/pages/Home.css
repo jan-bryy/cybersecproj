@@ -243,3 +243,16 @@
     font-weight: 600;
 }
 
+.product-status {
+    text-align: center;
+    padding: 32px 16px;
+    color: #757575;
+    font-size: 13px;
+}
+
+.product-retry {
+    width: auto;
+    padding: 8px 20px;
+    margin-top: 8px;
+}
+
