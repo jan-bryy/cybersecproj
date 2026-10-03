@@ -1,6 +1,6 @@
 // src/pages/SettingsPage.tsx
 import { useNavigate } from "react-router-dom";
-import { IonPage, IonContent, IonIcon } from "@ionic/react";
+import { IonPage, IonContent, IonIcon, useIonRouter } from "@ionic/react";
 import {
   arrowBackOutline,
   chevronForwardOutline,
@@ -13,9 +13,11 @@ import "./SettingsPage.css";
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
   const logoutAndClearCart = useLogout();
+  const ionRouter = useIonRouter();
 
   const handleLogout = async () => {
     await logoutAndClearCart();
+    ionRouter.push('/login', 'root', 'replace');
   };
 
   const handleDeleteAccount = () => {

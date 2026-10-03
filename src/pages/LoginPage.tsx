@@ -1,7 +1,7 @@
 // src/pages/LoginPage.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IonPage, IonContent, IonIcon } from "@ionic/react";
+import { IonPage, IonContent, IonIcon, useIonRouter } from "@ionic/react";
 import { personOutline, lockClosedOutline } from "ionicons/icons";
 import SuspendedAccountModal from "../components/SuspendedAccountModal";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,7 @@ const ERROR_MESSAGES = {
 } as const;
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
+  const ionRouter = useIonRouter();
   const { login, currentUser, isLoading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,10 +25,10 @@ const LoginPage: React.FC = () => {
 
   // The ONLY redirect: runs once a session exists (after login or on app start)
   useEffect(() => {
-    if (!authLoading && currentUser) {
-      navigate("/app/home", { replace: true });
+    if (!authLoading && currentUser && ionRouter.routeInfo.pathname === "/login") {
+      ionRouter.push("/app/home", "root", "replace");
     }
-  }, [authLoading, currentUser, navigate]);
+  }, [authLoading, currentUser, ionRouter]);
 
   const handleLogin = async (e?: React.FormEvent) => {
     e?.preventDefault();
