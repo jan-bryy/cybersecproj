@@ -1,51 +1,92 @@
 // src/components/SuspendedAccountModal.tsx
-import { IonModal, IonIcon } from '@ionic/react';
-import { alertOutline } from 'ionicons/icons';
-import './SuspendedAccountModal.css';
+import { IonModal } from "@ionic/react";
+import "./SuspendedAccountModal.css";
 
 interface SuspendedAccountModalProps {
   isOpen: boolean;
-  onTryAgain: () => void;
+  onClose: () => void;
   onContactSupport: () => void;
   onViewDetails: () => void;
 }
 
+const WarningTriangle: React.FC = () => (
+  <svg viewBox="0 0 96 70" className="suspended-icon" aria-hidden="true">
+    <polygon
+      points="48,8 88,62 8,62"
+      fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="12"
+      strokeLinejoin="round"
+    />
+    <rect x="44.5" y="26" width="7" height="20" rx="3.5" fill="#fff" />
+    <circle cx="48" cy="54" r="4" fill="#fff" />
+  </svg>
+);
+
 const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
   isOpen,
-  onTryAgain,
+  onClose,
   onContactSupport,
   onViewDetails,
 }) => {
   return (
-    <IonModal isOpen={isOpen} className="suspended-modal" backdropDismiss={false}>
-      <div className="suspended-modal-content">
+    <IonModal
+      isOpen={isOpen}
+      className="suspended-modal"
+      backdropDismiss={false}
+      onDidDismiss={onClose}
+      aria-labelledby="suspended-title"
+      aria-describedby="suspended-description"
+    >
+      <div className="suspended-modal-content" role="alertdialog">
         <div className="suspended-icon-wrapper">
-          <IonIcon icon={alertOutline} className="suspended-icon" />
+          <WarningTriangle />
         </div>
 
-        <h2 className="suspended-title">Your Account Has Been Temporarily Suspended</h2>
+        <h2 id="suspended-title" className="suspended-title">
+          Your Account Has Been Temporarily Suspended
+        </h2>
 
-        <p className="suspended-description">
-          We detected activity involving unauthorized credit card transactions associated with
-          your account. To protect users and prevent further unauthorized transactions, access to
-          your account has been temporarily restricted.
+        <p id="suspended-description" className="suspended-description">
+          We detected activity involving unauthorized credit card transactions
+          associated with your account. To protect users and prevent further
+          unauthorized transactions, access to your account has been temporarily
+          restricted.
         </p>
 
         <div className="suspended-info-box">
           <p className="suspended-info-title">What you can do:</p>
           <ul>
-            <li>Check the email sent to your registered Shopee email address for more information.</li>
-            <li>If you believe this action was made in error, contact Shopee Support.</li>
+            <li>
+              Check the email sent to your registered Shopee email address for
+              more information.
+            </li>
+            <li>
+              If you believe this action was made in error, contact Shopee
+              Support.
+            </li>
           </ul>
-          <button className="suspended-btn-outline" onClick={onViewDetails}>
+          <button
+            type="button"
+            className="suspended-btn-outline"
+            onClick={onViewDetails}
+          >
             View Details
           </button>
         </div>
 
-        <button className="suspended-btn-filled" onClick={onTryAgain}>
+        <button
+          type="button"
+          className="suspended-btn-filled"
+          onClick={onClose}
+        >
           Try Again
         </button>
-        <button className="suspended-btn-outline-plain" onClick={onContactSupport}>
+        <button
+          type="button"
+          className="suspended-btn-outline-plain"
+          onClick={onContactSupport}
+        >
           Contact Support
         </button>
       </div>

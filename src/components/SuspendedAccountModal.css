@@ -1,86 +1,116 @@
 /* src/components/SuspendedAccountModal.css */
-.suspended-modal {
-    --width: 320px;
-    --height: auto;
-    --border-radius: 24px;
+ion-modal.suspended-modal {
+  --background: transparent;
+  --box-shadow: none;
+  --overflow: visible; /* lets the triangle poke out of the top */
+  --width: 88%;
+  --max-width: 340px;
+  --height: auto;
+  --border-radius: 0;
+  --suspended-orange: #ee4d2d;
+  --suspended-peach: #fdece7;
 }
 
 .suspended-modal-content {
-    padding: 32px 24px 24px;
-    text-align: center;
+  position: relative;
+  background: #fff9f6;
+  border: 1.5px solid #1a1a1a;
+  border-radius: 30px;
+  padding: 48px 20px 22px;
+  text-align: center;
+  color: #000;
 }
 
 .suspended-icon-wrapper {
-    margin-bottom: 12px;
+  position: absolute;
+  top: -44px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84px;
+  line-height: 0;
 }
 
 .suspended-icon {
-    font-size: 56px;
-    color: #ee4d2d;
-    /* Shopee orange */
+  width: 100%;
+  height: auto;
+  color: var(--suspended-orange);
 }
 
 .suspended-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 12px;
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .suspended-description {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 20px;
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .suspended-info-box {
-    background: #fdece7;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: left;
-    margin-bottom: 20px;
+  background: var(--suspended-peach);
+  border-radius: 14px;
+  padding: 16px 16px 18px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .suspended-info-title {
-    color: #ee4d2d;
-    font-weight: 700;
-    margin-bottom: 8px;
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--suspended-orange);
 }
 
 .suspended-info-box ul {
-    padding-left: 18px;
-    font-size: 13px;
-    color: #333;
-    margin-bottom: 12px;
+  margin: 0 0 14px;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
-.suspended-btn-outline {
-    width: 100%;
-    background: white;
-    border: 1px solid #ee4d2d;
-    color: #ee4d2d;
-    font-weight: 600;
-    padding: 10px;
-    border-radius: 20px;
+.suspended-info-box li + li {
+  margin-top: 4px;
+}
+
+.suspended-btn-outline,
+.suspended-btn-filled,
+.suspended-btn-outline-plain {
+  display: block;
+  width: 72%;
+  margin: 0 auto;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: var(
+    --ion-font-family,
+    inherit
+  ); /* same font as the rest of the app */
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.suspended-btn-outline,
+.suspended-btn-outline-plain {
+  background: #fff;
+  color: var(--suspended-orange);
+  border: 1px solid var(--suspended-orange);
 }
 
 .suspended-btn-filled {
-    width: 100%;
-    background: #ee4d2d;
-    color: white;
-    font-weight: 700;
-    padding: 12px;
-    border-radius: 20px;
-    border: none;
-    margin-bottom: 10px;
+  background: var(--suspended-orange);
+  color: #fff;
+  border: 1px solid var(--suspended-orange);
+  margin-bottom: 12px;
 }
 
-.suspended-btn-outline-plain {
-    width: 100%;
-    background: white;
-    border: 1px solid #ee4d2d;
-    color: #ee4d2d;
-    font-weight: 600;
-    padding: 12px;
-    border-radius: 20px;
+.suspended-btn-filled:active {
+  background: #d8451f;
+}
+
+.suspended-btn-outline:active,
+.suspended-btn-outline-plain:active {
+  background: var(--suspended-peach);
 }

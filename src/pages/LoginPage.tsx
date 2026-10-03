@@ -1,45 +1,56 @@
 // src/pages/LoginPage.tsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IonPage, IonContent, IonIcon } from '@ionic/react';
-import { personOutline, lockClosedOutline } from 'ionicons/icons';
-import SuspendedAccountModal from '../components/SuspendedAccountModal';
-import { useAuth } from '../context/AuthContext';
-import './LoginPage.css';
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { IonPage, IonContent, IonIcon } from "@ionic/react";
+import { personOutline, lockClosedOutline } from "ionicons/icons";
+import SuspendedAccountModal from "../components/SuspendedAccountModal";
+import { useAuth } from "../context/AuthContext";
+import "./LoginPage.css";
+
+const ERROR_MESSAGES = {
+  invalid: "Incorrect email or password.",
+  locked: "Too many failed attempts. Please try again later.",
+  network: "No internet connection. Please check your network.",
+  error: "Something went wrong. Please try again.",
+} as const;
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { login, currentUser, isLoading: authLoading } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showSuspendedModal, setShowSuspendedModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    setErrorMessage('');
-    setIsLoading(true);
+  const handleLogin = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (isLoading) return;
+    setErrorMessage("");
 
+    if (!email.trim() || !password) {
+      setErrorMessage("Please enter your email and password.");
+      return;
+    }
+
+    setIsLoading(true);
     const result = await login(email, password);
     setIsLoading(false);
 
-    if (result === 'suspended') {
+    if (result === "success") {
+      navigate("/app/home", { replace: true });
+    } else if (result === "suspended") {
       setShowSuspendedModal(true);
-      return;
+    } else {
+      if (result === "invalid") setPassword("");
+      setErrorMessage(ERROR_MESSAGES[result]);
     }
-
-    if (result === 'invalid') {
-      setErrorMessage('Incorrect email or password.');
-      return;
-    }
-
-    if (result === 'error') {
-      setErrorMessage('Something went wrong. Please try again.');
-      return;
-    }
-
-    navigate('/app/home');
   };
+
+  // Skip login if a session already exists
+  if (!authLoading && currentUser) {
+    return <Navigate to="/app/home" replace />;
+  }
 
   return (
     <IonPage>
@@ -47,16 +58,24 @@ const LoginPage: React.FC = () => {
         <div className="login-container">
           <div className="login-logo-wrapper">
             <div className="login-logo-bag">
-                <img src="/shopeeicon.png" alt="Shopee" className="login-logo-img" />
+              <img
+                src="/shopeeicon.png"
+                alt="Shopee"
+                className="login-logo-img"
+              />
             </div>
           </div>
 
-          <div className="login-form">
+          <form className="login-form" onSubmit={handleLogin} noValidate>
             <div className="login-input-wrapper">
               <IonIcon icon={personOutline} className="login-input-icon" />
               <input
                 className="login-input"
-                type="email"
+                type="text"
+                inputMode="email"
+                autoComplete="username"
+                autoCapitalize="none"
+                autoCorrect="off"
                 placeholder="No. Handphone/Email/Username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -68,34 +87,49 @@ const LoginPage: React.FC = () => {
               <input
                 className="login-input"
                 type="password"
+                autoComplete="current-password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {errorMessage && <p className="login-error">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="login-error" role="alert">
+                {errorMessage}
+              </p>
+            )}
 
-            <button className="login-btn" onClick={handleLogin} disabled={isLoading}>
-              {isLoading ? 'LOGGING IN...' : 'LOG IN'}
+            <button className="login-btn" type="submit" disabled={isLoading}>
+              {isLoading ? "LOGGING IN..." : "LOG IN"}
             </button>
 
             <div className="login-links">
-              <a href="#" className="login-link">Forgot Password?</a>
+              <a
+                href="#"
+                className="login-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                Forgot Password?
+              </a>
             </div>
-          </div>
+          </form>
 
           <div className="login-divider">
             <span>or continue with</span>
           </div>
 
           <div className="login-social">
-            <button className="social-btn facebook-btn">Facebook</button>
-            <button className="social-btn google-btn">Google</button>
+            <button type="button" className="social-btn facebook-btn">
+              Facebook
+            </button>
+            <button type="button" className="social-btn google-btn">
+              Google
+            </button>
           </div>
 
           <div className="login-signup">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <span className="login-link-bold login-link-disabled">Sign Up</span>
           </div>
         </div>
@@ -103,8 +137,8 @@ const LoginPage: React.FC = () => {
         <SuspendedAccountModal
           isOpen={showSuspendedModal}
           onTryAgain={() => setShowSuspendedModal(false)}
-          onContactSupport={() => console.log('navigate to support')}
-          onViewDetails={() => console.log('navigate to details')}
+          onContactSupport={() => console.log("navigate to support")}
+          onViewDetails={() => console.log("navigate to details")}
         />
       </IonContent>
     </IonPage>
