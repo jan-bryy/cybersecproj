@@ -1,29 +1,38 @@
 // src/pages/SettingsPage.tsx
-import { useNavigate } from 'react-router-dom';
-import { IonPage, IonContent, IonIcon } from '@ionic/react';
-import { arrowBackOutline, chevronForwardOutline, logOutOutline, trashOutline } from 'ionicons/icons';
-import { useAuth } from '../context/AuthContext';
-import './SettingsPage.css';
+import { useNavigate } from "react-router-dom";
+import { IonPage, IonContent, IonIcon } from "@ionic/react";
+import {
+  arrowBackOutline,
+  chevronForwardOutline,
+  logOutOutline,
+  trashOutline,
+} from "ionicons/icons";
+import { useLogout } from "../hooks/useLogout";
+import "./SettingsPage.css";
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const logoutAndClearCart = useLogout();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login', { replace: true });
+  const handleLogout = async () => {
+    await logoutAndClearCart();
+    navigate("/login", { replace: true });
   };
 
   const handleDeleteAccount = () => {
     // Account-deletion warning modal wires in here next
-    console.log('trigger account deletion warning');
+    console.log("trigger account deletion warning");
   };
 
   return (
     <IonPage>
       <IonContent fullscreen className="settings-content">
         <div className="settings-header">
-          <IonIcon icon={arrowBackOutline} className="settings-back-icon" onClick={() => navigate(-1)} />
+          <IonIcon
+            icon={arrowBackOutline}
+            className="settings-back-icon"
+            onClick={() => navigate(-1)}
+          />
           <span className="settings-title">Settings</span>
         </div>
 
@@ -43,14 +52,20 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="settings-section">
-          <div className="settings-row settings-row-danger" onClick={handleDeleteAccount}>
+          <div
+            className="settings-row settings-row-danger"
+            onClick={handleDeleteAccount}
+          >
             <IonIcon icon={trashOutline} />
             <span>Delete Account</span>
           </div>
         </div>
 
         <div className="settings-section">
-          <div className="settings-row settings-row-logout" onClick={handleLogout}>
+          <div
+            className="settings-row settings-row-logout"
+            onClick={handleLogout}
+          >
             <IonIcon icon={logOutOutline} />
             <span>Log Out</span>
           </div>
