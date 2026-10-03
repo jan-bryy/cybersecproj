@@ -50,7 +50,6 @@ const App: React.FC = () => (
         <Route path="/splash" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
         <Route path="/checkout" element={<RequireAuth><CheckoutPage /></RequireAuth>} />
 
