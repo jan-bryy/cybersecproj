@@ -15,6 +15,7 @@ const loginLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => res.status(429).json({ error: "locked" }),
+  skipSuccessfulRequests: true
 });
 
 router.post("/login", loginLimiter, async (req, res) => {
