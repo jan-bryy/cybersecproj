@@ -16,7 +16,6 @@ const SettingsPage: React.FC = () => {
 
   const handleLogout = async () => {
     await logoutAndClearCart();
-    navigate("/login", { replace: true });
   };
 
   const handleDeleteAccount = () => {
