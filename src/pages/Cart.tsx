@@ -1,6 +1,6 @@
 // src/pages/Cart.tsx
 import { useMemo, useState } from 'react';
-import { IonPage, IonContent, IonIcon } from '@ionic/react';
+import { IonPage, IonContent, IonIcon, IonFooter } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import {
   arrowBackOutline,
@@ -54,7 +54,7 @@ const Cart: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="cart-content">
+      <IonContent className="cart-content">
         <div className="cart-header">
           <IonIcon icon={arrowBackOutline} className="cart-back" onClick={() => navigate(-1)} />
           <span className="cart-title">
@@ -143,48 +143,50 @@ const Cart: React.FC = () => {
       </IonContent>
 
       {items.length > 0 && (
-        <div className="cart-footer">
-          <div className="cart-footer-voucher">
-            <IonIcon icon={ticketOutline} className="cart-voucher-icon" />
-            <span>Shopee Vouchers</span>
-            <span className="cart-footer-voucher-cta">
-              Select or enter code <IonIcon icon={chevronForwardOutline} />
-            </span>
-          </div>
+        <IonFooter className="cart-footer ion-no-border">
+          <div className="cart-footer">
+            <div className="cart-footer-voucher">
+              <IonIcon icon={ticketOutline} className="cart-voucher-icon" />
+              <span>Shopee Vouchers</span>
+              <span className="cart-footer-voucher-cta">
+                Select or enter code <IonIcon icon={chevronForwardOutline} />
+              </span>
+            </div>
 
-          <div className="cart-footer-main">
-            <label className="cart-all">
-              <input
-                type="checkbox"
-                className="cart-check"
-                checked={allSelected}
-                onChange={() => setMany(items.map((i) => i.id), !allSelected)}
-              />
-              All
-            </label>
+            <div className="cart-footer-main">
+              <label className="cart-all">
+                <input
+                  type="checkbox"
+                  className="cart-check"
+                  checked={allSelected}
+                  onChange={() => setMany(items.map((i) => i.id), !allSelected)}
+                />
+                All
+              </label>
 
-            {editMode ? (
-              <button
-                className="cart-checkout-btn"
-                disabled={selectedItems.length === 0}
-                onClick={deleteSelected}
-              >
-                Delete ({selectedItems.length})
-              </button>
-            ) : (
-              <>
-                <span className="cart-footer-total">{peso(selectedTotal)}</span>
+              {editMode ? (
                 <button
                   className="cart-checkout-btn"
                   disabled={selectedItems.length === 0}
-                  onClick={checkout}
+                  onClick={deleteSelected}
                 >
-                  Check Out ({selectedCount})
+                  Delete ({selectedItems.length})
                 </button>
-              </>
-            )}
+              ) : (
+                <>
+                  <span className="cart-footer-total">{peso(selectedTotal)}</span>
+                  <button
+                    className="cart-checkout-btn"
+                    disabled={selectedItems.length === 0}
+                    onClick={checkout}
+                  >
+                    Check Out ({selectedCount})
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        </IonFooter>
       )}
     </IonPage>
   );

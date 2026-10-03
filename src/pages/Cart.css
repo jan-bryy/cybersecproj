@@ -41,6 +41,7 @@
     height: 20px;
     accent-color: #ee4d2d;
     flex-shrink: 0;
+    color-scheme: light;
 }
 
 .cart-shop-card {
@@ -60,6 +61,7 @@
 .cart-shop-name {
     font-weight: 700;
     font-size: 15px;
+    color: #333;
 }
 
 .cart-shop-chevron {
@@ -199,7 +201,8 @@
 }
 
 .cart-footer {
-    background: white;
+    background: #fff;
+    color: #333;
     border-top: 1px solid #eee;
 }
 
@@ -208,6 +211,7 @@
     align-items: center;
     gap: 10px;
     padding: 12px 14px;
+    color: #333;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
 }
@@ -233,6 +237,7 @@
     gap: 10px;
     font-size: 14px;
     margin-right: auto;
+    color: #333;
 }
 
 .cart-footer-total {
