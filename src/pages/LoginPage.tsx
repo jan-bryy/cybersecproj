@@ -7,13 +7,6 @@ import SuspendedAccountModal from "../components/SuspendedAccountModal";
 import { useAuth } from "../context/AuthContext";
 import "./LoginPage.css";
 
-const ERROR_MESSAGES = {
-  invalid: "Incorrect email or password.",
-  locked: "Too many failed attempts. Please try again later.",
-  network: "No internet connection. Please check your network.",
-  error: "Something went wrong. Please try again.",
-} as const;
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login, currentUser, isLoading: authLoading } = useAuth();
@@ -22,6 +15,13 @@ const LoginPage: React.FC = () => {
   const [showSuspendedModal, setShowSuspendedModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const ERROR_MESSAGES = {
+    invalid: "Incorrect email or password.",
+    locked: "Too many failed attempts. Please try again later.",
+    network: "No internet connection. Please check your network.",
+    error: "Something went wrong. Please try again.",
+  } as const;
 
   const handleLogin = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -66,16 +66,12 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          <form className="login-form" onSubmit={handleLogin} noValidate>
+          <div className="login-form">
             <div className="login-input-wrapper">
               <IonIcon icon={personOutline} className="login-input-icon" />
               <input
                 className="login-input"
-                type="text"
-                inputMode="email"
-                autoComplete="username"
-                autoCapitalize="none"
-                autoCorrect="off"
+                type="email"
                 placeholder="No. Handphone/Email/Username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -87,45 +83,36 @@ const LoginPage: React.FC = () => {
               <input
                 className="login-input"
                 type="password"
-                autoComplete="current-password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {errorMessage && (
-              <p className="login-error" role="alert">
-                {errorMessage}
-              </p>
-            )}
+            {errorMessage && <p className="login-error">{errorMessage}</p>}
 
-            <button className="login-btn" type="submit" disabled={isLoading}>
+            <button
+              className="login-btn"
+              onClick={handleLogin}
+              disabled={isLoading}
+            >
               {isLoading ? "LOGGING IN..." : "LOG IN"}
             </button>
 
             <div className="login-links">
-              <a
-                href="#"
-                className="login-link"
-                onClick={(e) => e.preventDefault()}
-              >
+              <a href="#" className="login-link">
                 Forgot Password?
               </a>
             </div>
-          </form>
+          </div>
 
           <div className="login-divider">
             <span>or continue with</span>
           </div>
 
           <div className="login-social">
-            <button type="button" className="social-btn facebook-btn">
-              Facebook
-            </button>
-            <button type="button" className="social-btn google-btn">
-              Google
-            </button>
+            <button className="social-btn facebook-btn">Facebook</button>
+            <button className="social-btn google-btn">Google</button>
           </div>
 
           <div className="login-signup">
@@ -136,7 +123,7 @@ const LoginPage: React.FC = () => {
 
         <SuspendedAccountModal
           isOpen={showSuspendedModal}
-          onTryAgain={() => setShowSuspendedModal(false)}
+          onClose={() => setShowSuspendedModal(false)}
           onContactSupport={() => console.log("navigate to support")}
           onViewDetails={() => console.log("navigate to details")}
         />
