@@ -29,10 +29,9 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
     setTyped('');
   };
 
-  const keep = () => {
-    reset();
-    onKeep();
-  };
+    const keep = () => {
+    onKeep(); 
+    };
 
   const matches = typed.trim() === CONFIRM_PHRASE;
 
@@ -43,12 +42,15 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
 
   return (
     <IonModal
-      isOpen={isOpen}
-      className="delete-modal"
-      backdropDismiss={false}
-      canDismiss={!isDeleting}
-      onDidDismiss={keep}
-      aria-labelledby="delete-title"
+    isOpen={isOpen}
+    className="delete-modal"
+    backdropDismiss={false}
+    canDismiss={!isDeleting}
+    onDidDismiss={() => {
+        reset();
+        onKeep();
+    }}
+    aria-labelledby="delete-title"
     >
       <div className="delete-modal-content" role="alertdialog">
         <div className="delete-icon-wrapper">
