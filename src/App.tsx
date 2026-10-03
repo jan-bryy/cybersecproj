@@ -19,6 +19,7 @@ import Account from './pages/Account';
 import SearchPage from './pages/SearchPage';
 import RequireAuth from './components/RequireAuth';
 import SettingsPage from './pages/SettingsPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,6 +51,8 @@ const App: React.FC = () => (
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
+        <Route path="/checkout" element={<RequireAuth><CheckoutPage /></RequireAuth>} />
 
         {/* Everything under /app has the tab bar, now guarded */}
         <Route path="/app/*" element={
