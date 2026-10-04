@@ -1,13 +1,14 @@
 // src/context/CartContext.tsx
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  shop?: string;    
-  variant?: string; 
+// brings product files into the code
+import type { Product } from '../types';
+
+// passes product through to the other files
+export type { Product } from '../types';
+
+export interface CartItem extends Product {
+  quantity: number;
 }
 
 export interface CartItem extends Product {

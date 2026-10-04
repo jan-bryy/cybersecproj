@@ -2,6 +2,10 @@
 const jwt = require("jsonwebtoken");
 const pool = require("../db");
 
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not set");
+}
+
 module.exports = async (req, res, next) => {
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
@@ -9,8 +13,15 @@ module.exports = async (req, res, next) => {
 
   let payload;
   try {
-    payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ["HS256"] });
+    payload = jwt.verify(token, process.env.JWT_SECRET, {
+      algorithms: ["HS256"],
+      maxAge: "7d", // match whatever login uses for expiresIn
+    });
   } catch {
+    return res.status(401).json({ error: "unauthorized" });
+  }
+
+  if (!payload || typeof payload.userId === "undefined") {
     return res.status(401).json({ error: "unauthorized" });
   }
 
@@ -21,8 +32,7 @@ module.exports = async (req, res, next) => {
     );
     const user = rows[0];
 
-    // Deleted account, or suspended after the token was issued
-    if (!user || user.status === "suspended") {
+    if (!user || user.status !== "active") {
       return res.status(401).json({ error: "unauthorized" });
     }
 

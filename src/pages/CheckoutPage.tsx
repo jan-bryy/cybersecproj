@@ -3,17 +3,16 @@ import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { IonPage, IonContent, IonIcon } from '@ionic/react';
 import { arrowBackOutline, checkmarkCircle } from 'ionicons/icons';
-import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { placeOrder } from '../api/orders';
+import { ApiError, NetworkError } from '../api/client';
 import './CheckoutPage.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
 const SHIPPING_FEE = 32;
 const peso = (n: number) => `₱${n.toLocaleString('en-PH')}`;
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
-  const { token, logout } = useAuth();
   const [isPlacing, setIsPlacing] = useState(false);
   const [error, setError] = useState('');
   const [placed, setPlaced] = useState<{ orderId: number; total: number } | null>(null);
@@ -28,44 +27,27 @@ const CheckoutPage: React.FC = () => {
     return <Navigate to="/app/cart" replace />;
   }
 
-  const placeOrder = async () => {
+  const handlePlaceOrder = async () => {
     if (isPlacing) return;
     setError('');
     setIsPlacing(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          paymentMethod: 'cod',
-          items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
-        }),
-      });
-
-      if (res.status === 401) {
-        await logout();
-        navigate('/login', { replace: true });
-        return;
-      }
-      if (!res.ok) {
-        setError(
-          res.status === 400
-            ? 'Some items are no longer available. Please review your cart.'
-            : 'Something went wrong. Please try again.'
-        );
-        return;
-      }
-
-      const data = await res.json();
+      const data = await placeOrder(items);
       setPlaced({ orderId: data.orderId, total: data.total });
       if (ids) ids.forEach(removeFromCart);
       else clearCart();
-    } catch {
-      setError('No internet connection. Please check your network.');
+    } catch (err) {
+      if (err instanceof NetworkError) {
+        setError('No internet connection. Please check your network.');
+      } else if (err instanceof ApiError && err.status === 401) {
+        // SessionWatcher has already logged the user out and cleared the cart
+        navigate('/login', { replace: true });
+      } else if (err instanceof ApiError && err.status === 400) {
+        setError('Some items are no longer available. Please review your cart.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } finally {
       setIsPlacing(false);
     }
@@ -176,7 +158,7 @@ const CheckoutPage: React.FC = () => {
           <div className="checkout-footer-total">
             Total <strong>{peso(total)}</strong>
           </div>
-          <button className="checkout-place-btn" onClick={placeOrder} disabled={isPlacing}>
+          <button className="checkout-place-btn" onClick={handlePlaceOrder} disabled={isPlacing}>
             {isPlacing ? 'Placing...' : 'Place Order'}
           </button>
         </div>

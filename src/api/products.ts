@@ -1,7 +1,6 @@
 // src/api/products.ts
-import { Product } from '../context/CartContext';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import type { Product } from '../types';
+import { request } from './client';
 
 interface ProductRow {
   id: number | string;
@@ -23,8 +22,6 @@ const toProduct = (r: ProductRow): Product => ({
 });
 
 export const fetchProducts = async (): Promise<Product[]> => {
-  const res = await fetch(`${API_URL}/api/products`);
-  if (!res.ok) throw new Error(String(res.status));
-  const rows: ProductRow[] = await res.json();
+  const rows = await request<ProductRow[]>('/api/products', { auth: false });
   return rows.map(toProduct);
 };

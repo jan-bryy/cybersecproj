@@ -7,6 +7,9 @@ import {
   useEffect,
 } from "react";
 import { SecureStorage } from "@aparajita/capacitor-secure-storage";
+import { ApiError, NetworkError, TOKEN_STORAGE_KEY } from "../api/client";
+import { loginRequest, LoginResponse } from "../api/auth";
+import type { AuthUser } from "../types";
 
 export type LoginResult =
   | "success" //Goes to app/home
@@ -15,12 +18,6 @@ export type LoginResult =
   | "locked" //Too mant failed attempts
   | "network" //No internet
   | "error"; //Something is wrong, try again
-
-interface AuthUser {
-  id: number;
-  email: string;
-  name: string;
-}
 
 interface AuthContextType {
   currentUser: AuthUser | null;
@@ -31,8 +28,6 @@ interface AuthContextType {
 }
 
 const USER_STORAGE_KEY = "shopapp_current_user";
-const TOKEN_STORAGE_KEY = "shopapp_token";
-const API_URL = import.meta.env.VITE_API_URL;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -99,24 +94,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     email: string,
     password: string,
   ): Promise<LoginResult> => {
-    let response: Response;
+    let data: LoginResponse;
     try {
-      response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password }),
-      });
-    } catch {
-      return "network";
+      data = await loginRequest(email, password);
+    } catch (err) {
+      if (err instanceof NetworkError) return "network";
+      if (err instanceof ApiError) {
+        if (err.status === 401) return "invalid";
+        if (err.status === 403) return "suspended";
+        if (err.status === 429) return "locked";
+      }
+      return "error";
     }
 
-    if (response.status === 401) return "invalid";
-    if (response.status === 403) return "suspended";
-    if (response.status === 429) return "locked";
-    if (!response.ok) return "error";
-
     try {
-      const data = await response.json();
       await SecureStorage.set(TOKEN_STORAGE_KEY, data.token);
       await SecureStorage.set(USER_STORAGE_KEY, JSON.stringify(data.user));
       setCurrentUser(data.user);

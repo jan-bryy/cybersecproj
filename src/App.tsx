@@ -20,6 +20,7 @@ import SearchPage from './pages/SearchPage';
 import RequireAuth from './components/RequireAuth';
 import SettingsPage from './pages/SettingsPage';
 import CheckoutPage from './pages/CheckoutPage';
+import SessionWatcher from './components/SessionWatcher';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -44,6 +45,7 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
+    <SessionWatcher />
     <IonReactRouter>
       <IonRouterOutlet>
         {/* Splash shown once on app load, then auto-navigates to /login */}
