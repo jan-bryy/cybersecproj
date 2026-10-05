@@ -55,6 +55,7 @@ ion-modal.contact-modal {
     background: #fff;
     font-family: var(--ion-font-family, inherit);
     font-size: 13px;
+    font-weight: 500;
     color: var(--contact-text);
     cursor: pointer;
 }
@@ -63,7 +64,6 @@ ion-modal.contact-modal {
     border-color: var(--contact-orange);
     background: var(--contact-orange-soft);
     color: var(--contact-orange);
-    font-weight: 600;
 }
 
 .contact-textarea {

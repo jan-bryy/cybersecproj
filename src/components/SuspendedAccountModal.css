@@ -60,11 +60,9 @@ ion-modal.suspended-modal {
 
 .suspended-info-title {
   margin: 0 0 10px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--suspended-muted);
+  color: var(--suspended-text);
 }
 
 .suspended-info-box ul {

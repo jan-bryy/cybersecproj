@@ -35,10 +35,12 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
   return (
     <>
       <IonModal
-        isOpen={isOpen}
+        isOpen={isOpen && !showContact}
         className="suspended-modal"
         backdropDismiss={false}
-        onDidDismiss={onClose}
+        onDidDismiss={() => {
+          if (!showContact) onClose();
+        }}
         aria-labelledby="suspended-title"
         aria-describedby="suspended-description"
       >
