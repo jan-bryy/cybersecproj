@@ -9,17 +9,20 @@ interface SuspendedAccountModalProps {
   onViewDetails: () => void;
 }
 
-const WarningTriangle: React.FC = () => (
-  <svg viewBox="0 0 96 70" className="suspended-icon" aria-hidden="true">
-    <polygon
-      points="48,8 88,62 8,62"
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="12"
-      strokeLinejoin="round"
-    />
-    <rect x="44.5" y="26" width="7" height="20" rx="3.5" fill="#fff" />
-    <circle cx="48" cy="54" r="4" fill="#fff" />
+const LockIcon: React.FC = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="suspended-icon"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="5" y="11" width="14" height="9" rx="2.5" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    <circle cx="12" cy="15.5" r="1.1" fill="currentColor" stroke="none" />
   </svg>
 );
 
@@ -40,7 +43,7 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
     >
       <div className="suspended-modal-content" role="alertdialog">
         <div className="suspended-icon-wrapper">
-          <WarningTriangle />
+          <LockIcon />
         </div>
 
         <h2 id="suspended-title" className="suspended-title">
@@ -55,7 +58,7 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
         </p>
 
         <div className="suspended-info-box">
-          <p className="suspended-info-title">What you can do:</p>
+          <p className="suspended-info-title">What you can do</p>
           <ul>
             <li>
               Check the email sent to your registered Shopee email address for
@@ -68,7 +71,7 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
           </ul>
           <button
             type="button"
-            className="suspended-btn-outline"
+            className="suspended-btn-link"
             onClick={onViewDetails}
           >
             View Details
@@ -78,16 +81,16 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
         <button
           type="button"
           className="suspended-btn-filled"
-          onClick={onClose}
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          className="suspended-btn-outline-plain"
           onClick={onContactSupport}
         >
           Contact Support
+        </button>
+        <button
+          type="button"
+          className="suspended-btn-text"
+          onClick={onClose}
+        >
+          Close
         </button>
       </div>
     </IonModal>
