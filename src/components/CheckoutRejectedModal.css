@@ -1,0 +1,88 @@
+/* src/components/CheckoutRejectedModal.css */
+ion-modal.rejected-modal {
+    --background: #fff;
+    --width: 100%;
+    --height: auto;
+    --max-height: 92%;
+    --border-radius: 28px 28px 0 0;
+    --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
+    --rejected-orange: #ee4d2d;
+    --rejected-orange-soft: #fdece7;
+    --rejected-text: #1f1f1f;
+    align-items: flex-end;
+}
+
+.rejected-modal-content {
+    padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
+    text-align: center;
+    color: var(--rejected-text);
+}
+
+.rejected-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--rejected-orange-soft);
+}
+
+.rejected-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--rejected-orange);
+}
+
+.rejected-code {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--rejected-orange-soft);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--rejected-orange);
+}
+
+.rejected-message {
+    margin: 0 0 26px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+.rejected-btn-filled,
+.rejected-btn-text {
+    display: block;
+    width: 100%;
+    border: none;
+    font-family: var(--ion-font-family, inherit);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rejected-btn-filled {
+    padding: 14px 12px;
+    margin-bottom: 6px;
+    border-radius: 14px;
+    background: var(--rejected-orange);
+    color: #fff;
+}
+
+.rejected-btn-filled:active {
+    background: #d8451f;
+}
+
+.rejected-btn-text {
+    padding: 12px;
+    background: none;
+    color: var(--rejected-orange);
+}
+
+.rejected-btn-text:active {
+    opacity: 0.6;
+}

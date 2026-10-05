@@ -6,6 +6,7 @@ import { arrowBackOutline, checkmarkCircle } from 'ionicons/icons';
 import { useCart } from '../context/CartContext';
 import { placeOrder } from '../api/orders';
 import { ApiError, NetworkError } from '../api/client';
+import CheckoutRejectedModal from '../components/CheckoutRejectedModal';
 import './CheckoutPage.css';
 
 const SHIPPING_FEE = 32;
@@ -22,6 +23,7 @@ const CheckoutPage: React.FC = () => {
   const items = ids ? cartItems.filter((i) => ids.includes(i.id)) : cartItems;
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const [showRejected, setShowRejected] = useState(false);
 
   if (!placed && items.length === 0) {
     return <Navigate to="/app/cart" replace />;
@@ -43,7 +45,11 @@ const CheckoutPage: React.FC = () => {
       } else if (err instanceof ApiError && err.status === 401) {
         // SessionWatcher has already logged the user out and cleared the cart
         navigate('/login', { replace: true });
-      } else if (err instanceof ApiError && err.status === 400) {
+      } else if (err instanceof ApiError && err.status === 403) {
+        // M04: the server rejected this checkout as unusual activity
+        setShowRejected(true);
+      }
+      else if (err instanceof ApiError && err.status === 400) {
         setError('Some items are no longer available. Please review your cart.');
       } else {
         setError('Something went wrong. Please try again.');
@@ -163,6 +169,12 @@ const CheckoutPage: React.FC = () => {
           </button>
         </div>
       </div>
+      
+      <CheckoutRejectedModal
+        isOpen={showRejected}
+        onClose={() => setShowRejected(false)}
+        onLearnMore={() => console.log('learn more')}
+      />
     </IonPage>
   );
 };
