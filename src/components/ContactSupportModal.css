@@ -1,0 +1,166 @@
+/* src/components/ContactSupportModal.css */
+ion-modal.contact-modal {
+    --background: #fff;
+    --width: 100%;
+    --height: auto;
+    --max-height: 92%;
+    --border-radius: 28px 28px 0 0;
+    --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
+    --contact-orange: #ee4d2d;
+    --contact-orange-soft: #fdece7;
+    --contact-text: #1f1f1f;
+    --contact-muted: #6b6b6b;
+    align-items: flex-end;
+}
+
+.contact-modal-content {
+    padding: 28px 24px calc(20px + env(safe-area-inset-bottom));
+    color: var(--contact-text);
+}
+
+.contact-title {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.contact-title-left {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.contact-label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--contact-muted);
+}
+
+.contact-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.contact-chip {
+    padding: 8px 14px;
+    border: 1px solid #e2e2e2;
+    border-radius: 999px;
+    background: #fff;
+    font-family: var(--ion-font-family, inherit);
+    font-size: 13px;
+    color: var(--contact-text);
+    cursor: pointer;
+}
+
+.contact-chip.is-active {
+    border-color: var(--contact-orange);
+    background: var(--contact-orange-soft);
+    color: var(--contact-orange);
+    font-weight: 600;
+}
+
+.contact-textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid #e2e2e2;
+    border-radius: 14px;
+    background: #fafafa;
+    font-family: var(--ion-font-family, inherit);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--contact-text);
+    resize: none;
+}
+
+.contact-textarea:focus {
+    outline: none;
+    border-color: var(--contact-orange);
+    background: #fff;
+}
+
+.contact-btn-filled,
+.contact-btn-text {
+    display: block;
+    width: 100%;
+    border: none;
+    font-family: var(--ion-font-family, inherit);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.contact-btn-filled {
+    padding: 14px 12px;
+    margin-bottom: 6px;
+    border-radius: 14px;
+    background: var(--contact-orange);
+    color: #fff;
+}
+
+.contact-btn-filled:active:not(:disabled) {
+    background: #d8451f;
+}
+
+.contact-btn-filled:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.contact-btn-text {
+    padding: 12px;
+    background: none;
+    color: var(--contact-muted);
+}
+
+.contact-btn-text:disabled {
+    opacity: 0.45;
+}
+
+/* Sent state */
+.contact-sent {
+    text-align: center;
+}
+
+.contact-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+}
+
+.contact-icon-success {
+    background: #e6f6ec;
+    color: #1e9e4f;
+}
+
+.contact-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.contact-text {
+    margin: 0 0 14px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--contact-muted);
+}
+
+.contact-ref {
+    margin: 0 0 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--contact-muted);
+}
