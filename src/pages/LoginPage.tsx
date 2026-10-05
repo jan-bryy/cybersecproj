@@ -128,8 +128,6 @@ const LoginPage: React.FC = () => {
         <SuspendedAccountModal
           isOpen={showSuspendedModal}
           onClose={() => setShowSuspendedModal(false)}
-          onContactSupport={() => console.log("navigate to support")}
-          onViewDetails={() => console.log("navigate to details")}
         />
       </IonContent>
     </IonPage>
