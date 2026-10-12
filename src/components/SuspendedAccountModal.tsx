@@ -54,10 +54,9 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
           </h2>
 
           <p id="suspended-description" className="suspended-description">
-            We detected activity involving unauthorized credit card transactions
-            associated with your account. To protect users and prevent further
-            unauthorized transactions, access to your account has been
-            temporarily restricted.
+            We detected paranormal activities associated with your account. 
+            To protect users and prevent further unauthorized transactions, 
+            access to your account has been temporarily restricted.
           </p>
 
           <div className="suspended-info-box">

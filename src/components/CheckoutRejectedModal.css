@@ -1,88 +1,157 @@
 /* src/components/CheckoutRejectedModal.css */
 ion-modal.rejected-modal {
-    --background: #fff;
-    --width: 100%;
-    --height: auto;
-    --max-height: 92%;
-    --border-radius: 28px 28px 0 0;
-    --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
-    --rejected-orange: #ee4d2d;
-    --rejected-orange-soft: #fdece7;
-    --rejected-text: #1f1f1f;
-    align-items: flex-end;
+  --background: #fff;
+  --width: 100%;
+  --height: auto;
+  --max-height: 92%;
+  --border-radius: 28px 28px 0 0;
+  --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
+  --rejected-orange: #ee4d2d;
+  --rejected-orange-soft: #fdece7;
+  --rejected-green: #1a9b4b;
+  --rejected-green-soft: #e8f7ee;
+  --rejected-text: #1f1f1f;
+  --rejected-muted: #6b6b6b;
+  align-items: flex-end;
 }
 
 .rejected-modal-content {
-    padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
-    text-align: center;
-    color: var(--rejected-text);
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
+  text-align: center;
+  color: var(--rejected-text);
 }
 
 .rejected-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 68px;
-    height: 68px;
-    margin: 0 auto 18px;
-    border-radius: 50%;
-    background: var(--rejected-orange-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--rejected-orange-soft);
 }
 
 .rejected-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--rejected-orange);
+  width: 32px;
+  height: 32px;
+  color: var(--rejected-orange);
 }
 
-.rejected-code {
-    display: inline-block;
-    margin-bottom: 12px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--rejected-orange-soft);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: var(--rejected-orange);
+.rejected-title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-.rejected-message {
-    margin: 0 0 26px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.55;
+.rejected-description {
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--rejected-muted);
+}
+
+.rejected-info {
+  margin-bottom: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #ececec;
+  text-align: left;
+}
+
+.rejected-subtitle {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--rejected-text);
+}
+
+.rejected-info-text {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--rejected-muted);
+}
+
+.rejected-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rejected-list li + li {
+  margin-top: 8px;
+}
+
+.rejected-list li::marker {
+  color: var(--rejected-orange);
+}
+
+.rejected-safe {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--rejected-green-soft);
+  text-align: left;
+}
+
+.rejected-safe-icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  color: var(--rejected-green);
+}
+
+.rejected-safe-title {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rejected-green);
+}
+
+.rejected-safe-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--rejected-text);
 }
 
 .rejected-btn-filled,
 .rejected-btn-text {
-    display: block;
-    width: 100%;
-    border: none;
-    font-family: var(--ion-font-family, inherit);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  border: none;
+  font-family: var(--ion-font-family, inherit);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .rejected-btn-filled {
-    padding: 14px 12px;
-    margin-bottom: 6px;
-    border-radius: 14px;
-    background: var(--rejected-orange);
-    color: #fff;
+  padding: 14px 12px;
+  margin-bottom: 6px;
+  border-radius: 14px;
+  background: var(--rejected-orange);
+  color: #fff;
 }
 
 .rejected-btn-filled:active {
-    background: #d8451f;
+  background: #d8451f;
 }
 
 .rejected-btn-text {
-    padding: 12px;
-    background: none;
-    color: var(--rejected-orange);
+  padding: 12px;
+  background: none;
+  color: var(--rejected-orange);
 }
 
 .rejected-btn-text:active {
-    opacity: 0.6;
+  opacity: 0.6;
 }

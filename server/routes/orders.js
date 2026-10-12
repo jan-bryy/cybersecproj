@@ -5,7 +5,13 @@ const requireAuth = require("../middleware/requireAuth");
 const router = express.Router();
 
 const SHIPPING_FEE = 32;
-const PAYMENT_METHODS = ["cod"];
+const PAYMENT_METHODS = ["cod", "card"];
+
+// Demo-only risk rules. A real system scores many signals (device, location,
+// failed attempts, velocity...) instead of checking a short list.
+const FLAGGED_CARDS = ["4000000000000259"];
+const VELOCITY_LIMIT = 5; // orders allowed...
+const VELOCITY_WINDOW = "1 minute"; // ...within this window (hard-coded, not user input)
 
 class HttpError extends Error {
   constructor(status, code) {
@@ -16,13 +22,24 @@ class HttpError extends Error {
 }
 
 router.post("/", requireAuth, async (req, res) => {
-  const { items, paymentMethod } = req.body || {};
+  const { items, paymentMethod, cardNumber } = req.body || {};
 
   if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
     return res.status(400).json({ error: "bad_request" });
   }
   if (!PAYMENT_METHODS.includes(paymentMethod)) {
     return res.status(400).json({ error: "bad_request" });
+  }
+
+  // Card check: used for this one comparison only, never stored or logged
+  if (paymentMethod === "card") {
+    const digits = String(cardNumber || "").replace(/\s/g, "");
+    if (!/^\d{13,19}$/.test(digits)) {
+      return res.status(400).json({ error: "bad_request" });
+    }
+    if (FLAGGED_CARDS.includes(digits)) {
+      return res.status(403).json({ error: "checkout_rejected" });
+    }
   }
 
   // Merge duplicates and validate; prices are NOT taken from the client
@@ -43,6 +60,18 @@ router.post("/", requireAuth, async (req, res) => {
   try {
     client = await pool.connect();
     await client.query("BEGIN");
+
+    // M04: too many checkouts in a short time looks like unusual activity
+    const { rows: recent } = await client.query(
+      `SELECT COUNT(*)::int AS n
+         FROM orders
+        WHERE user_id = $1
+          AND created_at > now() - interval '${VELOCITY_WINDOW}'`,
+      [req.user.id]
+    );
+    if (recent[0].n >= VELOCITY_LIMIT) {
+      throw new HttpError(403, "checkout_rejected");
+    }
 
     const { rows: products } = await client.query(
       "SELECT id, price FROM products WHERE id = ANY($1::int[])",

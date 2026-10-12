@@ -4,7 +4,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { IonPage, IonContent, IonIcon } from '@ionic/react';
 import { arrowBackOutline, checkmarkCircle } from 'ionicons/icons';
 import { useCart } from '../context/CartContext';
-import { placeOrder } from '../api/orders';
+import { placeOrder, isCheckoutRejected, PaymentMethod } from '../api/orders';
 import { ApiError, NetworkError } from '../api/client';
 import CheckoutRejectedModal from '../components/CheckoutRejectedModal';
 import './CheckoutPage.css';
@@ -12,11 +12,19 @@ import './CheckoutPage.css';
 const SHIPPING_FEE = 32;
 const peso = (n: number) => `₱${n.toLocaleString('en-PH')}`;
 
+// 4242424242424242 -> "4242 4242 4242 4242"
+const formatCard = (raw: string) =>
+  raw.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '$1 ').trim();
+
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const [isPlacing, setIsPlacing] = useState(false);
   const [error, setError] = useState('');
-  const [placed, setPlaced] = useState<{ orderId: number; total: number } | null>(null);
+  const [placed, setPlaced] = useState<{
+    orderId: number;
+    total: number;
+    method: PaymentMethod;
+  } | null>(null);
   const location = useLocation();
   const { items: cartItems, removeFromCart, clearCart } = useCart();
   const ids = (location.state as { ids?: string[] } | null)?.ids;
@@ -24,6 +32,8 @@ const CheckoutPage: React.FC = () => {
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const [showRejected, setShowRejected] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod');
+  const [cardNumber, setCardNumber] = useState('');
 
   if (!placed && items.length === 0) {
     return <Navigate to="/app/cart" replace />;
@@ -32,11 +42,23 @@ const CheckoutPage: React.FC = () => {
   const handlePlaceOrder = async () => {
     if (isPlacing) return;
     setError('');
+
+    const digits = cardNumber.replace(/\s/g, '');
+    if (paymentMethod === 'card' && !/^\d{13,19}$/.test(digits)) {
+      setError('Please enter a valid card number.');
+      return;
+    }
+
     setIsPlacing(true);
 
     try {
-      const data = await placeOrder(items);
-      setPlaced({ orderId: data.orderId, total: data.total });
+      const data = await placeOrder(
+        items,
+        paymentMethod,
+        paymentMethod === 'card' ? digits : undefined,
+      );
+      setPlaced({ orderId: data.orderId, total: data.total, method: paymentMethod });
+      setCardNumber('');
       if (ids) ids.forEach(removeFromCart);
       else clearCart();
     } catch (err) {
@@ -45,11 +67,10 @@ const CheckoutPage: React.FC = () => {
       } else if (err instanceof ApiError && err.status === 401) {
         // SessionWatcher has already logged the user out and cleared the cart
         navigate('/login', { replace: true });
-      } else if (err instanceof ApiError && err.status === 403) {
-        // M04: the server rejected this checkout as unusual activity
+      } else if (isCheckoutRejected(err)) {
+        // M04: the server flagged this checkout as unusual activity
         setShowRejected(true);
-      }
-      else if (err instanceof ApiError && err.status === 400) {
+      } else if (err instanceof ApiError && err.status === 400) {
         setError('Some items are no longer available. Please review your cart.');
       } else {
         setError('Something went wrong. Please try again.');
@@ -67,7 +88,11 @@ const CheckoutPage: React.FC = () => {
             <IonIcon icon={checkmarkCircle} className="checkout-success-icon" />
             <h2>Order Placed!</h2>
             <p>Order #{placed.orderId}</p>
-            <p>Pay {peso(placed.total)} on delivery.</p>
+            <p>
+              {placed.method === 'card'
+                ? `Paid ${peso(placed.total)} by card.`
+                : `Pay ${peso(placed.total)} on delivery.`}
+            </p>
             <button
               className="checkout-place-btn"
               onClick={() => navigate('/app/home', { replace: true })}
@@ -121,10 +146,52 @@ const CheckoutPage: React.FC = () => {
 
         <div className="checkout-card">
           <p className="checkout-label">Payment Methods</p>
-          <div className="checkout-pay-row">
+
+          <div
+            className="checkout-pay-row checkout-pay-option"
+            role="radio"
+            aria-checked={paymentMethod === 'cod'}
+            tabIndex={0}
+            onClick={() => setPaymentMethod('cod')}
+          >
             <span>Cash on Delivery</span>
-            <span className="checkout-check">✓</span>
+            <span className={paymentMethod === 'cod' ? 'checkout-check' : 'checkout-radio'}>
+              {paymentMethod === 'cod' ? '✓' : ''}
+            </span>
           </div>
+
+          <div
+            className="checkout-pay-row checkout-pay-option"
+            role="radio"
+            aria-checked={paymentMethod === 'card'}
+            tabIndex={0}
+            onClick={() => setPaymentMethod('card')}
+          >
+            <span>Credit / Debit Card</span>
+            <span className={paymentMethod === 'card' ? 'checkout-check' : 'checkout-radio'}>
+              {paymentMethod === 'card' ? '✓' : ''}
+            </span>
+          </div>
+
+          {paymentMethod === 'card' && (
+            <div className="checkout-card-field">
+              <input
+                className="checkout-card-input"
+                type="text"
+                inputMode="numeric"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(formatCard(e.target.value))}
+                placeholder="Card number"
+                aria-label="Card number"
+                autoComplete="off"
+                spellCheck={false}
+                disabled={isPlacing}
+              />
+              {/* Demo hint: remove before submitting */}
+              <p className="checkout-card-hint">Demo: 4000 0000 0000 0259 gets flagged</p>
+            </div>
+          )}
+
           <div className="checkout-pay-row checkout-pay-disabled">
             <span>ShopeePay / SPayLater</span>
             <span className="checkout-activate">Activate</span>
@@ -169,11 +236,10 @@ const CheckoutPage: React.FC = () => {
           </button>
         </div>
       </div>
-      
+
       <CheckoutRejectedModal
         isOpen={showRejected}
         onClose={() => setShowRejected(false)}
-        onLearnMore={() => console.log('learn more')}
       />
     </IonPage>
   );
