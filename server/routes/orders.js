@@ -11,7 +11,7 @@ const PAYMENT_METHODS = ["cod", "card"];
 // Demo-only risk rules. A real system scores many signals (device, location,
 // failed attempts, velocity...) instead of checking a short list.
 const FLAGGED_CARDS = ["4000000000000259"];
-const VELOCITY_LIMIT = 2;
+const VELOCITY_LIMIT = 3;
 const VELOCITY_WINDOW = "2 minutes";
 
 class HttpError extends Error {
