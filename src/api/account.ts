@@ -13,3 +13,17 @@ export const deleteAccount = (confirmation: string) =>
     method: "DELETE",
     body: { confirmation },
   });
+
+// Device security check consent. "Never asked" reads as false.
+//
+// Throws ApiError:
+//   400 { error: "bad_request" }  granted wasn't a boolean
+//   401                           session already ended
+export const getDeviceConsent = () =>
+  request<{ granted: boolean }>("/api/account/device-consent");
+
+export const setDeviceConsent = (granted: boolean) =>
+  request<{ granted: boolean }>("/api/account/device-consent", {
+    method: "PATCH",
+    body: { granted },
+  });

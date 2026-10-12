@@ -35,4 +35,41 @@ router.delete("/", requireAuth, async (req, res) => {
   }
 });
 
+// GET /api/account/device-consent
+// "granted" -> true; "declined" or never asked (NULL) -> false
+router.get("/device-consent", requireAuth, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT device_check_consent FROM users WHERE id = $1",
+      [req.user.id],
+    );
+    res.json({ granted: rows[0]?.device_check_consent === "granted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// PATCH /api/account/device-consent  { granted: boolean }
+router.patch("/device-consent", requireAuth, async (req, res) => {
+  const { granted } = req.body || {};
+  if (typeof granted !== "boolean") {
+    return res.status(400).json({ error: "bad_request" });
+  }
+
+  try {
+    await pool.query(
+      `UPDATE users
+          SET device_check_consent = $1,
+              device_check_consent_at = now()
+        WHERE id = $2`,
+      [granted ? "granted" : "declined", req.user.id],
+    );
+    res.json({ granted });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 module.exports = router;

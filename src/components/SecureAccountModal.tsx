@@ -51,8 +51,25 @@ const SecureAccountModal: React.FC<SecureAccountModalProps> = ({
         </h2>
 
         <p id="secure-description" className="secure-description">
-          Shopee would like to access your device data to ensure your account
-          is safe.
+          To keep your account safe, Shopee would like to check this device.
+        </p>
+
+        <div className="secure-info">
+          <p className="secure-subtitle">What we check</p>
+          <ul className="secure-list">
+            <li>Device model and system version</li>
+            <li>Whether this device is new to your account</li>
+          </ul>
+
+          <p className="secure-subtitle">Why</p>
+          <ul className="secure-list">
+            <li>To spot unusual logins and unrecognized devices</li>
+          </ul>
+        </div>
+
+        <p className="secure-note">
+          If you choose Not Now, you can still use the app, but we may ask you
+          to confirm it's you more often.
         </p>
 
         <button type="button" className="secure-btn-filled" onClick={onAgree}>

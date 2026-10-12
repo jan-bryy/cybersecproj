@@ -1,6 +1,7 @@
 // src/pages/SignUpPage.tsx
 import { useRef, useState } from "react";
 import { IonPage, IonContent, IonIcon, useIonRouter } from "@ionic/react";
+import { setDeviceConsent } from "../api/account";
 import {
   arrowBackOutline,
   helpCircleOutline,
@@ -64,9 +65,14 @@ const SignUpPage: React.FC = () => {
 
   // Agree and Not Now both continue into the app. The ref stops the modal's
   // dismiss event from running this a second time.
-  const finish = () => {
+  const finish = async (agreed: boolean) => {
     if (finished.current) return;
     finished.current = true;
+    try {
+      await setDeviceConsent(agreed);
+    } catch {
+      /* never block a new account on saving this choice */
+    }
     setShowSecure(false);
     ionRouter.push("/app/home", "root", "replace");
   };
@@ -128,7 +134,7 @@ const SignUpPage: React.FC = () => {
               <input
                 className="login-input"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="off"
                 placeholder="Password (at least 8 characters)"
                 maxLength={72}
                 value={password}
@@ -187,8 +193,8 @@ const SignUpPage: React.FC = () => {
 
         <SecureAccountModal
           isOpen={showSecure}
-          onAgree={finish}
-          onNotNow={finish}
+          onAgree={() => finish(true)}
+          onNotNow={() => finish(false)}
         />
       </IonContent>
     </IonPage>

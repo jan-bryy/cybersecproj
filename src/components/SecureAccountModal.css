@@ -14,6 +14,8 @@ ion-modal.secure-modal {
 }
 
 .secure-modal-content {
+  max-height: 92vh;
+  overflow-y: auto;
   padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
   text-align: center;
   color: var(--secure-text);
@@ -44,9 +46,50 @@ ion-modal.secure-modal {
 }
 
 .secure-description {
-  margin: 0 0 26px;
+  margin: 0 0 22px;
   font-size: 14px;
   line-height: 1.55;
+  color: var(--secure-muted);
+}
+
+.secure-info {
+  margin-bottom: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #ececec;
+  text-align: left;
+}
+
+.secure-subtitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--secure-text);
+}
+
+.secure-list {
+  margin: 0 0 18px;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.secure-list:last-child {
+  margin-bottom: 0;
+}
+
+.secure-list li + li {
+  margin-top: 8px;
+}
+
+.secure-list li::marker {
+  color: var(--secure-orange);
+}
+
+.secure-note {
+  margin: 0 0 24px;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
   color: var(--secure-muted);
 }
 
