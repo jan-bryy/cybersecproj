@@ -121,7 +121,16 @@ const LoginPage: React.FC = () => {
 
           <div className="login-signup">
             Don't have an account?{" "}
-            <span className="login-link-bold login-link-disabled">Sign Up</span>
+            <a
+              href="#"
+              className="login-link-bold"
+              onClick={(e) => {
+                e.preventDefault();
+                ionRouter.push("/signup");
+              }}
+            >
+              Sign Up
+            </a>
           </div>
         </div>
 

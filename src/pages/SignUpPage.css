@@ -1,0 +1,90 @@
+/* src/pages/SignUpPage.css (input, button, divider and social styles come from LoginPage.css) */
+.signup-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 12px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.signup-back {
+  font-size: 24px;
+  color: #ee4d2d;
+  cursor: pointer;
+}
+
+.signup-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.signup-help {
+  font-size: 22px;
+  color: #ee4d2d;
+}
+
+.signup-container {
+  padding-top: 24px;
+}
+
+.signup-logo {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.signup-voucher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 0 auto 28px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  background: #fdece7;
+  color: #ee4d2d;
+  font-size: 13px;
+}
+
+/* Grey until all fields are filled, like the original Next button */
+.login-btn.signup-btn:disabled {
+  background: #e8e8e8;
+  color: #9a9a9a;
+  opacity: 1;
+}
+
+.signup-social {
+  flex-direction: column;
+}
+
+.signup-social .social-btn {
+  padding: 14px;
+  font-size: 14px;
+  color: #222;
+}
+
+.signup-terms {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #757575;
+}
+
+.signup-terms-link {
+  color: #222;
+}
+
+.signup-login {
+  margin: 40px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: #757575;
+}
+
+.signup-login-link {
+  color: #2f80ed;
+  text-decoration: none;
+}

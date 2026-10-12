@@ -15,3 +15,14 @@ export const loginRequest = (email: string, password: string) =>
     body: { email: email.trim(), password },
     auth: false, // no token yet, and a 401 here means "wrong password", not "session ended"
   });
+
+  export const registerRequest = (
+  name: string,
+  email: string,
+  password: string,
+) =>
+  request<LoginResponse>("/api/auth/register", {
+    method: "POST",
+    body: { name, email, password },
+    auth: false,
+  });

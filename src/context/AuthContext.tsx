@@ -8,7 +8,7 @@ import {
 } from "react";
 import { SecureStorage } from "@aparajita/capacitor-secure-storage";
 import { ApiError, NetworkError, TOKEN_STORAGE_KEY } from "../api/client";
-import { loginRequest, LoginResponse } from "../api/auth";
+import { loginRequest, registerRequest, LoginResponse } from "../api/auth";
 import type { AuthUser } from "../types";
 
 export type LoginResult =
@@ -19,11 +19,24 @@ export type LoginResult =
   | "network" //No internet
   | "error"; //Something is wrong, try again
 
+export type RegisterResult =
+  | "success" //Account created and logged in
+  | "email_taken" //Email already registered
+  | "invalid" //Server rejected the details
+  | "locked" //Too many attempts
+  | "network" //No internet
+  | "error"; //Something is wrong, try again
+
 interface AuthContextType {
   currentUser: AuthUser | null;
   token: string | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<LoginResult>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<RegisterResult>;
   logout: () => Promise<void>;
 }
 
@@ -90,6 +103,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     restoreSession();
   }, []);
 
+  // Shared by login and register: store the session securely, then expose it
+  const saveSession = async (data: LoginResponse) => {
+    await SecureStorage.set(TOKEN_STORAGE_KEY, data.token);
+    await SecureStorage.set(USER_STORAGE_KEY, JSON.stringify(data.user));
+    setCurrentUser(data.user);
+    setToken(data.token);
+  };
+
   const login = async (
     email: string,
     password: string,
@@ -108,13 +129,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     try {
-      await SecureStorage.set(TOKEN_STORAGE_KEY, data.token);
-      await SecureStorage.set(USER_STORAGE_KEY, JSON.stringify(data.user));
-      setCurrentUser(data.user);
-      setToken(data.token);
+      await saveSession(data);
       return "success";
     } catch (err) {
       console.error("Login failed after server response:", err);
+      return "error";
+    }
+  };
+
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<RegisterResult> => {
+    let data: LoginResponse;
+    try {
+      data = await registerRequest(name, email, password);
+    } catch (err) {
+      if (err instanceof NetworkError) return "network";
+      if (err instanceof ApiError) {
+        if (err.status === 409) return "email_taken";
+        if (err.status === 400) return "invalid";
+        if (err.status === 429) return "locked";
+      }
+      return "error";
+    }
+
+    try {
+      await saveSession(data);
+      return "success";
+    } catch (err) {
+      console.error("Sign-up failed after server response:", err);
       return "error";
     }
   };
@@ -127,7 +172,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, token, isLoading, login, logout }}
+      value={{ currentUser, token, isLoading, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>

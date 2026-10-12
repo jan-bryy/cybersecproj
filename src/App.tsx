@@ -13,6 +13,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { homeOutline, cartOutline, personOutline } from 'ionicons/icons';
 import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Account from './pages/Account';
@@ -51,6 +52,7 @@ const App: React.FC = () => (
         {/* Splash shown once on app load, then auto-navigates to /login */}
         <Route path="/splash" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
         <Route path="/checkout" element={<RequireAuth><CheckoutPage /></RequireAuth>} />
