@@ -28,13 +28,13 @@ const toProduct = (r: ProductRow): Product => ({
 });
 
 const MOCK_LIVE = [
-  { id: 'l1', title: 'Glow Skincare Live Deals', thumb: 'https://placehold.co/200x260?text=LIVE' },
-  { id: 'l2', title: '99 Deals Makeup Sale', thumb: 'https://placehold.co/200x260?text=LIVE' },
+  { id: 'l1', title: 'Glow Skincare Live Deals', src: '/videos/live1.mp4' },
+  { id: 'l2', title: '99 Deals Makeup Sale', src: '/videos/live2.mp4' },
 ];
 
 const MOCK_VIDEOS = [
-  { id: 'v1', views: '175.1K', thumb: 'https://placehold.co/200x260?text=Video' },
-  { id: 'v2', views: '1.6K', thumb: 'https://placehold.co/200x260?text=Video' },
+  { id: 'v1', views: '175.1K', src: '/videos/vid1.mp4' },
+  { id: 'v2', views: '1.6K', src: '/videos/vid2.mp4' },
 ];
 
 const Home: React.FC = () => {
@@ -124,7 +124,16 @@ const Home: React.FC = () => {
             <div className="live-video-cards">
               {MOCK_LIVE.map((l) => (
                 <div className="live-card" key={l.id}>
-                  <img src={l.thumb} alt={l.title} />
+                  <video
+                    src={l.src}
+                    poster={l.thumb}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    style={{ width: '100%', aspectRatio: '3 / 4', objectFit: 'cover', display: 'block' }}
+                  />
                   <span className="live-badge">LIVE</span>
                   <p className="live-caption">{l.title}</p>
                 </div>
@@ -136,7 +145,16 @@ const Home: React.FC = () => {
             <div className="live-video-cards">
               {MOCK_VIDEOS.map((v) => (
                 <div className="live-card" key={v.id}>
-                  <img src={v.thumb} alt="video" />
+                  <video
+                    src={v.src}
+                    poster={v.thumb}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    style={{ width: '100%', aspectRatio: '3 / 4', objectFit: 'cover', display: 'block' }}
+                  />
                   <span className="video-views">▶ {v.views}</span>
                 </div>
               ))}
