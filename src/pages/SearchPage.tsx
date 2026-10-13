@@ -45,7 +45,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="search-content">
+      <IonContent fullscreen className="search-content page-enter">
         <div className="search-header">
           <IonIcon icon={arrowBackOutline} className="search-back-icon" onClick={() => navigate(-1)} />
           <input

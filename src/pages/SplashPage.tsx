@@ -27,7 +27,7 @@ const SplashPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="splash-content">
+      <IonContent fullscreen className="splash-content page-enter">
         <div className="splash-container">
           <div className="splash-logo-wrapper">
             <img src="/shopeeicon.png" alt="Shopee" className="splash-logo-img" />

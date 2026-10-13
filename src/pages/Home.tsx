@@ -69,7 +69,7 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="home-content">
+      <IonContent fullscreen className="home-content page-enter">
         {/* Top orange header with search bar */}
         <div className="home-header">
           <div className="home-search-bar" onClick={() => navigate('/search')}>
