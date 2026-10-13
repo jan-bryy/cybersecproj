@@ -126,7 +126,6 @@ const Home: React.FC = () => {
                 <div className="live-card" key={l.id}>
                   <video
                     src={l.src}
-                    poster={l.thumb}
                     autoPlay
                     muted
                     loop
@@ -147,7 +146,6 @@ const Home: React.FC = () => {
                 <div className="live-card" key={v.id}>
                   <video
                     src={v.src}
-                    poster={v.thumb}
                     autoPlay
                     muted
                     loop
