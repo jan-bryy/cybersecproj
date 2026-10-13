@@ -55,7 +55,7 @@ const UnusualActivityModal: React.FC<UnusualActivityModalProps> = ({
           <p id="unusual-description" className="suspended-description">
             Your login attempt has been rejected due to unusual activities in
             your account. If you think this is a mistake please contact us 
-            and try again later
+            or try again later
           </p>
 
           <button type="button" className="suspended-btn-filled" onClick={onClose}>
