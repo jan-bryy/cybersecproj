@@ -43,6 +43,14 @@ const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [reloadKey, setReloadKey] = useState(0);
+  const shuffle = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -55,7 +63,7 @@ const Home: React.FC = () => {
       })
       .then((rows: ProductRow[]) => {
         if (cancelled) return;
-        setProducts(rows.map(toProduct));
+        setProducts(shuffle(rows.map(toProduct)));
         setStatus('ready');
       })
       .catch(() => {
