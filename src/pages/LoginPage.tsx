@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IonPage, IonContent, IonIcon, useIonRouter } from "@ionic/react";
 import { personOutline, lockClosedOutline } from "ionicons/icons";
 import SuspendedAccountModal from "../components/SuspendedAccountModal";
+import UnusualActivityModal from "../components/UnusualActivityModal";
 import { useAuth } from "../context/AuthContext";
 import "./LoginPage.css";
 
@@ -22,6 +23,7 @@ const LoginPage: React.FC = () => {
   const [showSuspendedModal, setShowSuspendedModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showUnusualModal, setShowUnusualModal] = useState(false);
 
   // The ONLY redirect: runs once a session exists (after login or on app start)
   useEffect(() => {
@@ -49,6 +51,11 @@ const LoginPage: React.FC = () => {
     }
     if (result === "suspended") {
       setShowSuspendedModal(true);
+      return;
+    }
+    if (result === "locked") {
+      setPassword("");
+      setShowUnusualModal(true);
       return;
     }
     if (result === "invalid") setPassword("");
@@ -137,6 +144,10 @@ const LoginPage: React.FC = () => {
         <SuspendedAccountModal
           isOpen={showSuspendedModal}
           onClose={() => setShowSuspendedModal(false)}
+        />
+        <UnusualActivityModal
+          isOpen={showUnusualModal}
+          onClose={() => setShowUnusualModal(false)}
         />
       </IonContent>
     </IonPage>

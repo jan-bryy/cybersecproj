@@ -11,7 +11,7 @@ const DUMMY_HASH = bcrypt.hashSync("not-a-real-password", 10);
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, // 10 attempts per IP per 15 minutes
+  max: 5, // 10 attempts per IP per 15 minutes
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => res.status(429).json({ error: "locked" }),
