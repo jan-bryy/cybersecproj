@@ -28,13 +28,13 @@ const toProduct = (r: ProductRow): Product => ({
 });
 
 const MOCK_LIVE = [
-  { id: 'l1', title: 'Glow Skincare Live Deals', src: '/videos/live1.mp4' },
-  { id: 'l2', title: '99 Deals Makeup Sale', src: '/videos/live2.mp4' },
+  { id: 'l1', title: 'Glow Skincare Live Deals', src: '/images/videos/live1.mp4' },
+  { id: 'l2', title: '99 Deals Makeup Sale', src: '/images/videos/live2.mp4' },
 ];
 
 const MOCK_VIDEOS = [
-  { id: 'v1', views: '175.1K', src: '/videos/vid1.mp4' },
-  { id: 'v2', views: '1.6K', src: '/videos/vid2.mp4' },
+  { id: 'v1', views: '175.1K', src: '/images/videos/vid1.mp4' },
+  { id: 'v2', views: '1.6K', src: '/images/videos/vid2.mp4' },
 ];
 
 const Home: React.FC = () => {
