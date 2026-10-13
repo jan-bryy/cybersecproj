@@ -117,15 +117,6 @@ const LoginPage: React.FC = () => {
             </div>
           </form>
 
-          <div className="login-divider">
-            <span>or continue with</span>
-          </div>
-
-          <div className="login-social">
-            <button type="button" className="social-btn facebook-btn">Facebook</button>
-            <button type="button" className="social-btn google-btn">Google</button>
-          </div>
-
           <div className="login-signup">
             Don't have an account?{" "}
             <a

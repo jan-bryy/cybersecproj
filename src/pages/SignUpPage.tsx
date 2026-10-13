@@ -157,19 +157,6 @@ const SignUpPage: React.FC = () => {
             </button>
           </form>
 
-          <div className="login-divider">
-            <span>OR</span>
-          </div>
-
-          <div className="login-social signup-social">
-            <button type="button" className="social-btn">
-              Sign Up with Google
-            </button>
-            <button type="button" className="social-btn">
-              Sign Up with Facebook
-            </button>
-          </div>
-
           <p className="signup-terms">
             By signing up, you agree to Shopee's{" "}
             <span className="signup-terms-link">Terms of Service</span> &amp;{" "}
