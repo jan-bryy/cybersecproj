@@ -1,7 +1,7 @@
 // src/pages/SearchPage.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IonPage, IonContent, IonIcon } from '@ionic/react';
+import { IonPage, IonContent, IonIcon, IonBadge, IonSkeletonText } from '@ionic/react';
 import { arrowBackOutline, searchOutline } from 'ionicons/icons';
 import { Product, useCart } from '../context/CartContext';
 import { fetchProducts } from '../api/products';
@@ -64,7 +64,19 @@ const SearchPage: React.FC = () => {
             {term ? `Results for "${query.trim()}"` : 'Search Suggestions'}
           </p>
 
-          {status === 'loading' && <p className="search-status">Loading products...</p>}
+          {status === 'loading' && (
+            <div className="product-grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className="product-card" key={i}>
+                  <IonSkeletonText animated style={{ width: '100%', aspectRatio: '1', margin: 0 }} />
+                  <div className="product-info">
+                    <IonSkeletonText animated style={{ width: '80%', height: '13px', margin: '0 0 8px' }} />
+                    <IonSkeletonText animated style={{ width: '40%', height: '15px', margin: 0 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {status === 'error' && (
             <div className="search-status" role="alert">

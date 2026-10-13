@@ -1,95 +1,95 @@
 /* src/pages/SearchPage.css */
 .search-content {
-    --background: #ffffff;
+  --background: #ffffff;
 }
 
 .search-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 12px;
-    padding: 10px 14px;
-    border-radius: 24px;
-    background: white;
-    border: 1.5px solid #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 12px) 12px 12px;
+  padding: 10px 14px;
+  border-radius: 24px;
+  background: white;
+  border: 1.5px solid #000;
 }
 
 .search-back-icon {
-    font-size: 20px;
-    color: #333;
-    flex-shrink: 0;
+  font-size: 20px;
+  color: #333;
+  flex-shrink: 0;
 }
 
 .search-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    color: #333;
-    background: transparent;
-    color-scheme: light;
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #333;
+  background: transparent;
+  color-scheme: light;
 }
 
 .search-input::placeholder {
-    color: #bbb;
+  color: #bbb;
 }
 
 .search-go-icon {
-    font-size: 18px;
-    color: #999;
-    flex-shrink: 0;
+  font-size: 18px;
+  color: #999;
+  flex-shrink: 0;
 }
 
 .search-suggestions {
-    padding: 16px 12px;
+  padding: 16px 12px;
 }
 
 .search-suggestions-title {
-    font-weight: 700;
-    font-size: 15px;
-    margin: 0 0 12px;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 12px;
 }
 
 .search-suggestions-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .suggestion-card {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .suggestion-card img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
 }
 
 .suggestion-name {
-    padding: 8px;
-    font-size: 13px;
-    text-align: center;
-    margin: 0;
+  padding: 8px;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
 }
 
 .search-status {
-    text-align: center;
-    padding: 32px 16px;
-    color: #757575;
-    font-size: 13px;
+  text-align: center;
+  padding: 32px 16px;
+  color: #757575;
+  font-size: 13px;
 }
 
 .search-retry {
-    margin-top: 8px;
-    background: #ee4d2d;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-size: 12px;
-    font-weight: 600;
+  margin-top: 8px;
+  background: #ee4d2d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 600;
 }

@@ -5,7 +5,7 @@
 
 .account-header {
   background: #ee4d2d;
-  padding: 16px 12px;
+  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 12px) 12px 16px;
 }
 
 .account-header-top {

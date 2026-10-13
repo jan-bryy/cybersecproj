@@ -1,6 +1,6 @@
 // src/pages/Home.tsx
 import { useEffect, useState } from 'react';
-import { IonPage, IonContent, IonIcon, IonBadge } from '@ionic/react';
+import { IonPage, IonContent, IonIcon, IonBadge, IonSkeletonText } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import { searchOutline, cameraOutline, chatbubblesOutline, cartOutline } from 'ionicons/icons';
 import { useCart, Product } from '../context/CartContext';
@@ -137,7 +137,19 @@ const Home: React.FC = () => {
         </div>
 
         {/* Product grid */}
-        {status === 'loading' && <p className="product-status">Loading products...</p>}
+        {status === 'loading' && (
+          <div className="product-grid">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div className="product-card" key={i}>
+                <IonSkeletonText animated style={{ width: '100%', aspectRatio: '1', margin: 0 }} />
+                <div className="product-info">
+                  <IonSkeletonText animated style={{ width: '80%', height: '13px', margin: '0 0 8px' }} />
+                  <IonSkeletonText animated style={{ width: '40%', height: '15px', margin: 0 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {status === 'error' && (
           <div className="product-status" role="alert">
