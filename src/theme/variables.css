@@ -1,17 +1,29 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
 
-@keyframes page-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
-.page-enter {
-  animation: page-enter 240ms ease-out backwards;
+.add-to-cart-btn,
+.suggestion-card,
+.product-card,
+.account-purchase-item {
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.add-to-cart-btn:active,
+.suggestion-card:active,
+.product-card:active,
+.account-purchase-item:active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
+.account-header,
+.home-header,
+.home-promo-strip,
+.account-section-title {
+  user-select: none;
+  -webkit-user-select: none;
 }
