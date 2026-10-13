@@ -3,6 +3,10 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET missing or too short');
+}
+
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");

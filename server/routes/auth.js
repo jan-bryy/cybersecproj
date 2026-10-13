@@ -27,7 +27,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT id, email, name, password_hash, status FROM users WHERE email = $1",
+      "SELECT id, email, name, password_hash, status, totp_enabled FROM users WHERE email = $1",
       [email.trim().toLowerCase()],
     );
     const user = result.rows[0];
@@ -46,10 +46,19 @@ router.post("/login", loginLimiter, async (req, res) => {
       return res.status(403).json({ error: "suspended" });
     }
 
+    if (user.totp_enabled) {
+      const pendingToken = jwt.sign(
+        { userId: user.id, purpose: "2fa" },
+        process.env.JWT_SECRET,
+        { algorithm: "HS256", expiresIn: "5m" }
+      );
+      return res.json({ result: "2fa_required", pendingToken });
+    }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { algorithm: "HS256", expiresIn: "1h" },
     );
 
     res.json({
@@ -116,7 +125,7 @@ router.post("/register", registerLimiter, async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { algorithm: "HS256", expiresIn: "1h" },
     );
 
     res.status(201).json({ token, user });
