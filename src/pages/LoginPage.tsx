@@ -162,8 +162,9 @@ const LoginPage: React.FC = () => {
         <div className="login-container">
           <div className="login-logo-wrapper">
             <div className="login-logo-bag">
-              <img src="/shopeeicon.png" alt="Shopee" className="login-logo-img" />
+              <img src="/vyshop-logo.svg" alt="VyShop" className="login-logo-img" />
             </div>
+            <h1 className="login-brand">VyShop</h1>
           </div>
 
           {step === "credentials" && (
@@ -177,7 +178,7 @@ const LoginPage: React.FC = () => {
                   autoComplete="username"
                   autoCapitalize="none"
                   autoCorrect="off"
-                  placeholder="No. Handphone/Email/Username"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />

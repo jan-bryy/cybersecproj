@@ -54,7 +54,7 @@ router.post("/setup", requireAuth.allowUnenrolled, setupLimiter, async (req, res
       req.user.id,
     ]);
 
-    const otpauth = authenticator.keyuri(rows[0].email, "Shopapp", secret);
+    const otpauth = authenticator.keyuri(rows[0].email, "VyShop", secret);
     const qr = await QRCode.toDataURL(otpauth);
     res.json({ qr, manualKey: secret });
   } catch (err) {
