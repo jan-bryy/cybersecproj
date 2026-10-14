@@ -1,4 +1,3 @@
-// src/api/auth.ts
 import { request } from "./client";
 import type { AuthUser } from "../types";
 
@@ -7,22 +6,31 @@ export interface LoginResponse {
   user: AuthUser;
 }
 
-// Throws ApiError (401 / 403 / 429 / ...) or NetworkError.
-// AuthContext maps those to a LoginResult.
+export interface TwoFactorRequired {
+  result: "2fa_required";
+  pendingToken: string;
+}
+
 export const loginRequest = (email: string, password: string) =>
-  request<LoginResponse>("/api/auth/login", {
+  request<LoginResponse | TwoFactorRequired>("/api/auth/login", {
     method: "POST",
     body: { email: email.trim(), password },
-    auth: false, // no token yet, and a 401 here means "wrong password", not "session ended"
+    auth: false,
   });
 
-  export const registerRequest = (
-  name: string,
-  email: string,
-  password: string,
+export const loginVerifyRequest = (
+  pendingToken: string,
+  input: { code?: string; recoveryCode?: string },
 ) =>
+  request<LoginResponse>("/api/2fa/login-verify", {
+    method: "POST",
+    body: { pendingToken, ...input },
+    auth: false,
+  });
+
+export const registerRequest = (name: string, email: string, password: string) =>
   request<LoginResponse>("/api/auth/register", {
     method: "POST",
     body: { name, email, password },
     auth: false,
-  });
+  });s

@@ -63,7 +63,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 
     res.json({
       token,
-      user: { id: user.id, email: user.email, name: user.name },
+      user: { id: user.id, email: user.email, name: user.name, totpEnabled: false },
     });
   } catch (err) {
     console.error(err);
@@ -128,7 +128,7 @@ router.post("/register", registerLimiter, async (req, res) => {
       { algorithm: "HS256", expiresIn: "1h" },
     );
 
-    res.status(201).json({ token, user });
+    res.status(201).json({ token, user: { ...user, totpEnabled: false } });
   } catch (err) {
     if (err.code === "23505") {
       // unique violation (two sign-ups raced)

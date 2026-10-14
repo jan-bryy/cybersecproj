@@ -22,6 +22,8 @@ import RequireAuth from './components/RequireAuth';
 import SettingsPage from './pages/SettingsPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SessionWatcher from './components/SessionWatcher';
+import TwoFactorSetupPage from './pages/TwoFactorSetupPage';
+import TwoFactorGate from './components/TwoFactorGate';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -48,11 +50,13 @@ const App: React.FC = () => (
   <IonApp>
     <SessionWatcher />
     <IonReactRouter>
+      <TwoFactorGate />
       <IonRouterOutlet>
         {/* Splash shown once on app load, then auto-navigates to /login */}
         <Route path="/splash" element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/2fa-setup" element={<TwoFactorSetupPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
         <Route path="/checkout" element={<RequireAuth><CheckoutPage /></RequireAuth>} />

@@ -1,0 +1,40 @@
+.setup-qr {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  display: block;
+}
+
+.setup-key {
+  font-family: monospace;
+  font-size: 13px;
+  word-break: break-all;
+  color: #1f1f1f;
+}
+
+.recovery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.recovery-code {
+  font-family: monospace;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px 4px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+.setup-copy {
+  align-self: center;
+}
+
+.setup-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #757575;
+}

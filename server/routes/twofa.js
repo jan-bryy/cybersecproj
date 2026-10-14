@@ -182,7 +182,7 @@ router.post("/login-verify", async (req, res) => {
       process.env.JWT_SECRET,
       { algorithm: "HS256", expiresIn: "1h" }
     );
-    res.json({ token, user: { id: userId, email: user.email, name: user.name } });
+    res.json({ token, user: { id: userId, email: user.email, name: user.name, totpEnabled: true } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

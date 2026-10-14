@@ -3,19 +3,21 @@ import {
   createContext,
   useContext,
   useState,
+  useRef,
   ReactNode,
   useEffect,
 } from "react";
 import { SecureStorage } from "@aparajita/capacitor-secure-storage";
 import { ApiError, NetworkError, TOKEN_STORAGE_KEY } from "../api/client";
-import { loginRequest, registerRequest, LoginResponse } from "../api/auth";
+import { loginRequest, loginVerifyRequest, registerRequest, TwoFactorRequired, LoginResponse  } from "../api/auth";
 import type { AuthUser } from "../types";
 
 export type LoginResult =
   | "success" //Goes to app/home
+  | "2fa_required" //Password right, waiting for the 6-digit code
   | "invalid" //Incorrect email/pass
   | "suspended" //Self explanatory
-  | "locked" //Too mant failed attempts
+  | "locked" //Too many failed attempts
   | "network" //No internet
   | "error"; //Something is wrong, try again
 
@@ -27,7 +29,17 @@ export type RegisterResult =
   | "network" //No internet
   | "error"; //Something is wrong, try again
 
+export type VerifyResult =
+  | "success"
+  | "invalid_code" //Wrong code
+  | "locked" //Too many attempts, temporary lock
+  | "expired" //Pending token expired, log in again
+  | "network"
+  | "error";
+
 interface AuthContextType {
+  verifyTwoFactor: (input: { code?: string; recoveryCode?: string }) => Promise<VerifyResult>;
+  markTwoFactorEnabled: () => Promise<void>;
   currentUser: AuthUser | null;
   token: string | null;
   isLoading: boolean;
@@ -71,6 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const pendingTokenRef = useRef<string | null>(null); 
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -115,7 +128,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     email: string,
     password: string,
   ): Promise<LoginResult> => {
-    let data: LoginResponse;
+    let data: LoginResponse | TwoFactorRequired;
     try {
       data = await loginRequest(email, password);
     } catch (err) {
@@ -126,6 +139,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         if (err.status === 429) return "locked";
       }
       return "error";
+    }
+
+    if ("pendingToken" in data) {
+      pendingTokenRef.current = data.pendingToken;
+      return "2fa_required";
     }
 
     try {
@@ -164,6 +182,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+    const verifyTwoFactor = async (input: {
+    code?: string;
+    recoveryCode?: string;
+  }): Promise<VerifyResult> => {
+    const pendingToken = pendingTokenRef.current;
+    if (!pendingToken) return "expired";
+
+    let data: LoginResponse;
+    try {
+      data = await loginVerifyRequest(pendingToken, input);
+    } catch (err) {
+      if (err instanceof NetworkError) return "network";
+      if (err instanceof ApiError) {
+        const code = (err.body as { error?: string } | undefined)?.error;
+        if (err.status === 429) return "locked";
+        if (err.status === 401) {
+          if (code === "pending_expired") {
+            pendingTokenRef.current = null;
+            return "expired";
+          }
+          if (code === "invalid_code") return "invalid_code";
+        }
+      }
+      return "error";
+    }
+
+    try {
+      await saveSession(data);
+      pendingTokenRef.current = null;
+      return "success";
+    } catch (err) {
+      console.error("2FA login failed after server response:", err);
+      return "error";
+    }
+  };
+
+  const markTwoFactorEnabled = async () => {
+    if (!currentUser) return;
+    const updated = { ...currentUser, totpEnabled: true };
+    setCurrentUser(updated);
+    try {
+      await SecureStorage.set(USER_STORAGE_KEY, JSON.stringify(updated));
+    } catch (err) {
+      console.error("Failed to update stored user:", err);
+    }
+  };
+
   const logout = async () => {
     setCurrentUser(null);
     setToken(null);
@@ -172,7 +237,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, token, isLoading, login, register, logout }}
+      value={{ currentUser, token, isLoading, login, register, logout, verifyTwoFactor, markTwoFactorEnabled }}
     >
       {children}
     </AuthContext.Provider>

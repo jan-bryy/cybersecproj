@@ -32,6 +32,11 @@ export const setUnauthorizedHandler = (fn: (() => void) | null) => {
   onUnauthorized = fn;
 };
 
+let onSetupRequired: (() => void) | null = null;
+export const setSetupRequiredHandler = (fn: (() => void) | null) => {
+  onSetupRequired = fn;
+};
+
 const getToken = async (): Promise<string | null> => {
   try {
     return (await SecureStorage.get(TOKEN_STORAGE_KEY)) as string | null;
@@ -78,6 +83,13 @@ export async function request<T>(
       data = await res.json();
     } catch {
       /* no JSON body */
+    }
+    if (
+      res.status === 403 &&
+      auth &&
+      (data as { error?: string } | undefined)?.error === "2fa_setup_required"
+    ) {
+      onSetupRequired?.();
     }
     throw new ApiError(res.status, data);
   }
