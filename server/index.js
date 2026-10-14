@@ -12,6 +12,7 @@ const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
 const accountRoutes = require("./routes/account");
 const helmet = require("helmet");
+const twofaRoutes = require("./routes/twofa");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -42,6 +43,7 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/2fa", twofaRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/account", accountRoutes);
