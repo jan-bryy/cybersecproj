@@ -38,3 +38,8 @@
   font-size: 13px;
   color: #757575;
 }
+
+.setup-logout {
+  align-self: center;
+  margin-top: 4px;
+}

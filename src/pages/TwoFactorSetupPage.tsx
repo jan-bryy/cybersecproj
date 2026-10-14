@@ -3,6 +3,7 @@ import { IonPage, IonContent, useIonRouter } from "@ionic/react";
 import { useAuth } from "../context/AuthContext";
 import { ApiError, NetworkError } from "../api/client";
 import { startTwoFactorSetup, confirmTwoFactorSetup } from "../api/twofa";
+import { useLogout } from "../hooks/useLogout";
 import "./LoginPage.css";
 import "./TwoFactorSetupPage.css";
 
@@ -20,6 +21,18 @@ const TwoFactorSetupPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const logout = useLogout();
+
+const logoutLink = (
+  <button
+    type="button"
+    className="login-link-button setup-logout"
+    onClick={() => logout()}
+    disabled={isLoading}
+  >
+    Log out
+  </button>
+);
 
   useEffect(() => {
     if (!authLoading && !currentUser) ionRouter.push("/login", "root", "replace");
@@ -110,6 +123,7 @@ const TwoFactorSetupPage: React.FC = () => {
               <button className="login-btn" onClick={handleStart} disabled={isLoading}>
                 {isLoading ? "PLEASE WAIT..." : "CONTINUE"}
               </button>
+              {logoutLink}
             </div>
           )}
 
@@ -139,6 +153,7 @@ const TwoFactorSetupPage: React.FC = () => {
               <button className="login-btn" type="submit" disabled={isLoading}>
                 {isLoading ? "VERIFYING..." : "VERIFY"}
               </button>
+              {logoutLink}
             </form>
           )}
 
