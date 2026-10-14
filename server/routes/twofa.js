@@ -7,6 +7,17 @@ const pool = require("../db");
 const requireAuth = require("../middleware/requireAuth");
 const jwt = require("jsonwebtoken");
 const { encrypt, decrypt } = require("../utils/crypto");
+const bcrypt = require("bcryptjs");
+const DUMMY_HASH = bcrypt.hashSync("not-a-real-password", 10);
+
+const unlockLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true,
+  handler: (req, res) => res.status(429).json({ error: "locked" }),
+});
 
 const router = express.Router();
 authenticator.options = { window: 1 }; // allow 30s clock drift either way
@@ -191,12 +202,12 @@ router.post("/login-verify", async (req, res) => {
 
 // Re-checks a TOTP code for an already logged-in user, sharing the
 // attempt counter, lock and replay protection with /login-verify.
-async function checkCodeForSession(userId, code) {
+async function checkSecondFactor(userId, { code, recoveryCode }) {
   const { rows } = await pool.query(
     `UPDATE users SET totp_failed_attempts = totp_failed_attempts + 1
      WHERE id = $1 AND totp_enabled = true
        AND (totp_locked_until IS NULL OR totp_locked_until <= now())
-     RETURNING totp_secret, totp_last_step, totp_failed_attempts, totp_lock_count`,
+     RETURNING email, name, totp_secret, totp_last_step, totp_failed_attempts, totp_lock_count`,
     [userId]
   );
   if (!rows[0]) return { error: "locked" };
@@ -213,11 +224,21 @@ async function checkCodeForSession(userId, code) {
     return { error: "locked" };
   }
 
-  const delta = authenticator.checkDelta(code, decrypt(user.totp_secret));
-  if (delta === null) return { error: "invalid_code" };
-  const step = Math.floor(Date.now() / 1000 / 30) + delta;
-  if (user.totp_last_step !== null && step <= Number(user.totp_last_step)) {
-    return { error: "invalid_code" }; // replay
+  let step = 0;
+  if (recoveryCode) {
+    const r = await pool.query(
+      `UPDATE recovery_codes SET used_at = now()
+       WHERE user_id = $1 AND code_hash = $2 AND used_at IS NULL RETURNING id`,
+      [userId, hashCode(String(recoveryCode).trim())]
+    );
+    if (r.rowCount !== 1) return { error: "invalid_code" };
+  } else {
+    const delta = authenticator.checkDelta(String(code).trim(), decrypt(user.totp_secret));
+    if (delta === null) return { error: "invalid_code" };
+    step = Math.floor(Date.now() / 1000 / 30) + delta;
+    if (user.totp_last_step !== null && step <= Number(user.totp_last_step)) {
+      return { error: "invalid_code" }; // replay
+    }
   }
 
   await pool.query(
@@ -226,7 +247,7 @@ async function checkCodeForSession(userId, code) {
      WHERE id = $1`,
     [userId, step]
   );
-  return { ok: true };
+  return { ok: true, user };
 }
 
 // How many unused recovery codes are left
@@ -249,7 +270,7 @@ router.post("/recovery-codes", requireAuth, setupLimiter, async (req, res) => {
     const code = String((req.body && req.body.code) || "").trim();
     if (!/^\d{6}$/.test(code)) return res.status(400).json({ error: "invalid_code" });
 
-    const check = await checkCodeForSession(req.user.id, code);
+    const check = await checkSecondFactor(req.user.id, { code });
     if (check.error === "locked") return res.status(429).json({ error: "locked" });
     // 400, not 401: a 401 would make SessionWatcher log the user out
     if (check.error) return res.status(400).json({ error: "invalid_code" });
@@ -274,6 +295,52 @@ router.post("/recovery-codes", requireAuth, setupLimiter, async (req, res) => {
     }
 
     res.json({ recoveryCodes: codes });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Way back in for a user whose IP is banned (F02): password + 2FA in one request
+router.post("/unlock", unlockLimiter, async (req, res) => {
+  try {
+    const { email, password, code, recoveryCode } = req.body || {};
+    const second = recoveryCode || code;
+    if (
+      typeof email !== "string" || typeof password !== "string" ||
+      typeof second !== "string" || !second.trim()
+    ) {
+      return res.status(400).json({ error: "bad_request" });
+    }
+
+    const { rows } = await pool.query(
+      "SELECT id, email, name, password_hash, status, totp_enabled FROM users WHERE email = $1",
+      [email.trim().toLowerCase()]
+    );
+    const user = rows[0];
+    const passwordMatches = await bcrypt.compare(
+      password,
+      user ? user.password_hash : DUMMY_HASH
+    );
+
+    // Anything other than "right password, active, enrolled" looks identical
+    if (!user || !passwordMatches || user.status !== "active" || !user.totp_enabled) {
+      return res.status(401).json({ error: "invalid" });
+    }
+
+    const check = await checkSecondFactor(user.id, { code, recoveryCode });
+    if (check.error === "locked") return res.status(429).json({ error: "locked" });
+    if (check.error) return res.status(401).json({ error: "invalid" });
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { algorithm: "HS256", expiresIn: "1h" }
+    );
+    res.json({
+      token,
+      user: { id: user.id, email: user.email, name: user.name, totpEnabled: true },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

@@ -9,7 +9,7 @@ import {
 } from "react";
 import { SecureStorage } from "@aparajita/capacitor-secure-storage";
 import { ApiError, NetworkError, TOKEN_STORAGE_KEY } from "../api/client";
-import { loginRequest, loginVerifyRequest, registerRequest, TwoFactorRequired, LoginResponse  } from "../api/auth";
+import { loginRequest, loginVerifyRequest, registerRequest, unlockRequest, TwoFactorRequired, LoginResponse } from "../api/auth";
 import type { AuthUser } from "../types";
 
 export type LoginResult =
@@ -37,7 +37,21 @@ export type VerifyResult =
   | "network"
   | "error";
 
+  export type UnlockResult =
+  | "success"
+  | "invalid" //Wrong email, password or code (the server doesn't say which)
+  | "locked" //Too many attempts
+  | "network"
+  | "error";
+
 interface AuthContextType {
+  unlock: (input: {
+    email: string;
+    password: string;
+    code?: string;
+    recoveryCode?: string;
+  }) => Promise<UnlockResult>;
+
   verifyTwoFactor: (input: { code?: string; recoveryCode?: string }) => Promise<VerifyResult>;
   markTwoFactorEnabled: () => Promise<void>;
   currentUser: AuthUser | null;
@@ -218,6 +232,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+    const unlock = async (input: {
+    email: string;
+    password: string;
+    code?: string;
+    recoveryCode?: string;
+  }): Promise<UnlockResult> => {
+    let data: LoginResponse;
+    try {
+      data = await unlockRequest(input);
+    } catch (err) {
+      if (err instanceof NetworkError) return "network";
+      if (err instanceof ApiError) {
+        if (err.status === 401) return "invalid";
+        if (err.status === 429) return "locked";
+      }
+      return "error";
+    }
+
+    try {
+      await saveSession(data);
+      pendingTokenRef.current = null; // drop any half-finished login
+      return "success";
+    } catch (err) {
+      console.error("Unlock failed after server response:", err);
+      return "error";
+    }
+  };
+
   const markTwoFactorEnabled = async () => {
     if (!currentUser) return;
     const updated = { ...currentUser, totpEnabled: true };
@@ -237,7 +279,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, token, isLoading, login, register, logout, verifyTwoFactor, markTwoFactorEnabled }}
+      value={{ currentUser, token, isLoading, login, register, logout, verifyTwoFactor, markTwoFactorEnabled, unlock }}
     >
       {children}
     </AuthContext.Provider>

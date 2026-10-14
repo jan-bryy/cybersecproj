@@ -34,3 +34,15 @@ export const registerRequest = (name: string, email: string, password: string) =
     body: { name, email, password },
     auth: false,
   });
+
+export const unlockRequest = (input: {
+  email: string;
+  password: string;
+  code?: string;
+  recoveryCode?: string;
+}) =>
+  request<LoginResponse>("/api/2fa/unlock", {
+    method: "POST",
+    body: { ...input, email: input.email.trim() },
+    auth: false,
+  });

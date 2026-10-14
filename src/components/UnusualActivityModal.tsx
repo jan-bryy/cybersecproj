@@ -6,6 +6,7 @@ import "./SuspendedAccountModal.css";
 interface UnusualActivityModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onUnlock: () => void; //LoginPage decides what unlock does
 }
 
 const ShieldIcon: React.FC = () => (
@@ -28,6 +29,7 @@ const ShieldIcon: React.FC = () => (
 const UnusualActivityModal: React.FC<UnusualActivityModalProps> = ({
   isOpen,
   onClose,
+  onUnlock,
 }) => {
   const [showContact, setShowContact] = useState(false);
 
@@ -55,19 +57,18 @@ const UnusualActivityModal: React.FC<UnusualActivityModalProps> = ({
           <p id="unusual-description" className="suspended-description">
             Your login attempt has been rejected due to unusual activities in
             your account. If you think this is a mistake please contact us 
-            or try again later
+            or try again later.
           </p>
 
-          <button type="button" className="suspended-btn-filled" onClick={onClose}>
-            OK
-          </button>
-          <button
-            type="button"
-            className="suspended-btn-text"
-            onClick={() => setShowContact(true)}
-          >
-            Learn More
-          </button>
+        <button type="button" className="suspended-btn-filled" onClick={onClose}>
+          OK
+        </button>
+        <button type="button" className="suspended-btn-text" onClick={onUnlock}>
+          Unlock with 2FA
+        </button>
+        <button type="button" className="suspended-btn-text" onClick={() => setShowContact(true)}>
+          Learn More
+        </button>
         </div>
       </IonModal>
 
