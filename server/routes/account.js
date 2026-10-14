@@ -37,7 +37,7 @@ router.delete("/", requireAuth, async (req, res) => {
 
 // GET /api/account/device-consent
 // "granted" -> true; "declined" or never asked (NULL) -> false
-router.get("/device-consent", requireAuth, async (req, res) => {
+router.get("/device-consent", requireAuth.allowUnenrolled, async (req, res) => {
   try {
     const { rows } = await pool.query(
       "SELECT device_check_consent FROM users WHERE id = $1",
@@ -51,7 +51,7 @@ router.get("/device-consent", requireAuth, async (req, res) => {
 });
 
 // PATCH /api/account/device-consent  { granted: boolean }
-router.patch("/device-consent", requireAuth, async (req, res) => {
+router.patch("/device-consent", requireAuth.allowUnenrolled, async (req, res) => {
   const { granted } = req.body || {};
   if (typeof granted !== "boolean") {
     return res.status(400).json({ error: "bad_request" });

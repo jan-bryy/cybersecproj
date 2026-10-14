@@ -74,7 +74,7 @@ const SignUpPage: React.FC = () => {
       /* never block a new account on saving this choice */
     }
     setShowSecure(false);
-    ionRouter.push("/app/home", "root", "replace");
+    ionRouter.push("/2fa-setup", "root", "replace");
   };
 
   return (

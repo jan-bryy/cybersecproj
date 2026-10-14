@@ -189,4 +189,95 @@ router.post("/login-verify", async (req, res) => {
   }
 });
 
+// Re-checks a TOTP code for an already logged-in user, sharing the
+// attempt counter, lock and replay protection with /login-verify.
+async function checkCodeForSession(userId, code) {
+  const { rows } = await pool.query(
+    `UPDATE users SET totp_failed_attempts = totp_failed_attempts + 1
+     WHERE id = $1 AND totp_enabled = true
+       AND (totp_locked_until IS NULL OR totp_locked_until <= now())
+     RETURNING totp_secret, totp_last_step, totp_failed_attempts, totp_lock_count`,
+    [userId]
+  );
+  if (!rows[0]) return { error: "locked" };
+  const user = rows[0];
+
+  if (user.totp_failed_attempts > MAX_ATTEMPTS) {
+    const minutes = Math.min(15 * 2 ** user.totp_lock_count, 1440);
+    await pool.query(
+      `UPDATE users SET totp_locked_until = now() + ($2 || ' minutes')::interval,
+         totp_failed_attempts = 0, totp_lock_count = totp_lock_count + 1
+       WHERE id = $1 AND (totp_locked_until IS NULL OR totp_locked_until <= now())`,
+      [userId, String(minutes)]
+    );
+    return { error: "locked" };
+  }
+
+  const delta = authenticator.checkDelta(code, decrypt(user.totp_secret));
+  if (delta === null) return { error: "invalid_code" };
+  const step = Math.floor(Date.now() / 1000 / 30) + delta;
+  if (user.totp_last_step !== null && step <= Number(user.totp_last_step)) {
+    return { error: "invalid_code" }; // replay
+  }
+
+  await pool.query(
+    `UPDATE users SET totp_failed_attempts = 0, totp_lock_count = 0, totp_locked_until = NULL,
+       totp_last_step = GREATEST(COALESCE(totp_last_step, 0), $2)
+     WHERE id = $1`,
+    [userId, step]
+  );
+  return { ok: true };
+}
+
+// How many unused recovery codes are left
+router.get("/status", requireAuth, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT count(*)::int AS remaining FROM recovery_codes WHERE user_id = $1 AND used_at IS NULL",
+      [req.user.id]
+    );
+    res.json({ enabled: true, recoveryRemaining: rows[0].remaining });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Replace all recovery codes, but only with a current authenticator code
+router.post("/recovery-codes", requireAuth, setupLimiter, async (req, res) => {
+  try {
+    const code = String((req.body && req.body.code) || "").trim();
+    if (!/^\d{6}$/.test(code)) return res.status(400).json({ error: "invalid_code" });
+
+    const check = await checkCodeForSession(req.user.id, code);
+    if (check.error === "locked") return res.status(429).json({ error: "locked" });
+    // 400, not 401: a 401 would make SessionWatcher log the user out
+    if (check.error) return res.status(400).json({ error: "invalid_code" });
+
+    const codes = makeRecoveryCodes();
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      await client.query("DELETE FROM recovery_codes WHERE user_id = $1", [req.user.id]);
+      for (const c of codes) {
+        await client.query(
+          "INSERT INTO recovery_codes (user_id, code_hash) VALUES ($1, $2)",
+          [req.user.id, hashCode(c)]
+        );
+      }
+      await client.query("COMMIT");
+    } catch (e) {
+      await client.query("ROLLBACK");
+      throw e;
+    } finally {
+      client.release();
+    }
+
+    res.json({ recoveryCodes: codes });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 module.exports = router;

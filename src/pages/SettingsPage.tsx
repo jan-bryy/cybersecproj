@@ -102,7 +102,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="settings-section">
-          <div className="settings-row">
+          <div className="settings-row" onClick={() => ionRouter.push('/security')}>
             <span>Account Security</span>
             <IonIcon icon={chevronForwardOutline} />
           </div>
