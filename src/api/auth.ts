@@ -33,4 +33,4 @@ export const registerRequest = (name: string, email: string, password: string) =
     method: "POST",
     body: { name, email, password },
     auth: false,
-  });s
+  });
