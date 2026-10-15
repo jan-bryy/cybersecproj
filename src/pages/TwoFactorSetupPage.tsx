@@ -150,16 +150,7 @@ const logoutLink = (
                 <br />
                 <span className="setup-key">{manualKey}</span>
               </p>
-              <input
-                className="login-code-input"
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                placeholder="000000"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              />
+              <CodeInput value={code} onChange={setCode} />
               {errorMessage && <p className="login-error" role="alert">{errorMessage}</p>}
               <button className="login-btn" type="submit" disabled={isLoading}>
                 {isLoading ? "VERIFYING..." : "VERIFY"}

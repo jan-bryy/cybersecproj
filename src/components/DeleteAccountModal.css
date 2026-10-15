@@ -166,9 +166,3 @@ ion-modal.delete-modal {
 .delete-btn-text:active:not(:disabled) {
   opacity: 0.6;
 }
-
-.delete-code-input {
-  font-size: 22px;
-  letter-spacing: 6px;
-  text-align: center;
-}

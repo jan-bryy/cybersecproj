@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IonModal } from '@ionic/react';
 import type { SecondFactor } from '../api/account';
 import './DeleteAccountModal.css';
+import CodeInput from './CodeInput';
 
 export const CONFIRM_PHRASE = 'delete-account';
 
@@ -156,25 +157,24 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
                 : 'Enter the 6-digit code from your authenticator app to delete your account.'}
             </p>
 
-            <input
-              className="delete-input delete-code-input"
-              type="text"
-              inputMode={useRecovery ? 'text' : 'numeric'}
-              autoComplete="one-time-code"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              maxLength={useRecovery ? 11 : 6}
-              placeholder={useRecovery ? 'xxxxx-xxxxx' : '000000'}
-              value={codeInput}
-              onChange={(e) =>
-                setCodeInput(
-                  useRecovery ? e.target.value : e.target.value.replace(/\D/g, '').slice(0, 6),
-                )
-              }
-              disabled={isDeleting}
-              autoFocus
-            />
+            {useRecovery ? (
+              <input
+                className="delete-input"
+                type="text"
+                autoComplete="one-time-code"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                maxLength={11}
+                placeholder="xxxxx-xxxxx"
+                value={codeInput}
+                onChange={(e) => setCodeInput(e.target.value)}
+                disabled={isDeleting}
+                autoFocus
+              />
+            ) : (
+              <CodeInput value={codeInput} onChange={setCodeInput} disabled={isDeleting} autoFocus />
+            )}
 
             {error && (
               <p className="delete-error" role="alert">

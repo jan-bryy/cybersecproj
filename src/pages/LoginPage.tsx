@@ -6,6 +6,7 @@ import SuspendedAccountModal from "../components/SuspendedAccountModal";
 import UnusualActivityModal from "../components/UnusualActivityModal";
 import { useAuth } from "../context/AuthContext";
 import "./LoginPage.css";
+import CodeInput from "../components/CodeInput";
 
 const ERROR_MESSAGES = {
   invalid: "Incorrect email or password.",
@@ -223,25 +224,22 @@ const LoginPage: React.FC = () => {
                   : "Enter the 6-digit code from your authenticator app."}
               </p>
 
-              <input
-                className="login-code-input"
-                type="text"
-                inputMode={useRecovery ? "text" : "numeric"}
-                autoComplete="one-time-code"
-                autoCapitalize="none"
-                autoCorrect="off"
-                maxLength={useRecovery ? 11 : 6}
-                placeholder={useRecovery ? "xxxxx-xxxxx" : "000000"}
-                value={codeInput}
-                onChange={(e) =>
-                  setCodeInput(
-                    useRecovery
-                      ? e.target.value
-                      : e.target.value.replace(/\D/g, "").slice(0, 6),
-                  )
-                }
-                autoFocus
-              />
+              {useRecovery ? (
+                <input
+                  className="login-code-input"
+                  type="text"
+                  autoComplete="one-time-code"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  maxLength={11}
+                  placeholder="xxxxx-xxxxx"
+                  value={codeInput}
+                  onChange={(e) => setCodeInput(e.target.value)}
+                  autoFocus
+                />
+              ) : (
+                <CodeInput value={codeInput} onChange={setCodeInput} autoFocus />
+              )}
 
               {errorMessage && (
                 <p className="login-error" role="alert">
@@ -306,24 +304,21 @@ const LoginPage: React.FC = () => {
                 />
               </div>
 
-              <input
-                className="login-code-input"
-                type="text"
-                inputMode={useRecovery ? "text" : "numeric"}
-                autoComplete="one-time-code"
-                autoCapitalize="none"
-                autoCorrect="off"
-                maxLength={useRecovery ? 11 : 6}
-                placeholder={useRecovery ? "xxxxx-xxxxx" : "000000"}
-                value={codeInput}
-                onChange={(e) =>
-                  setCodeInput(
-                    useRecovery
-                      ? e.target.value
-                      : e.target.value.replace(/\D/g, "").slice(0, 6),
-                  )
-                }
-              />
+              {useRecovery ? (
+                <input
+                  className="login-code-input"
+                  type="text"
+                  autoComplete="one-time-code"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  maxLength={11}
+                  placeholder="xxxxx-xxxxx"
+                  value={codeInput}
+                  onChange={(e) => setCodeInput(e.target.value)}
+                />
+              ) : (
+                <CodeInput value={codeInput} onChange={setCodeInput} />
+              )}
 
               {errorMessage && (
                 <p className="login-error" role="alert">
