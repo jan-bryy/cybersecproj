@@ -113,19 +113,19 @@ const SearchPage: React.FC = () => {
             <div className="product-grid">
               {visible.map((product) => (
                 <div className="product-card" key={product.id}>
-                  <div className="product-image-wrap">
-                    <img src={product.image} alt={product.name} className="product-image" />
-                    <button
-                      className="product-add"
-                      onClick={() => addToCart(product)}
-                      aria-label={`Add ${product.name} to cart`}
-                    >
-                      <IonIcon icon={addOutline} />
-                    </button>
-                  </div>
+                  <img src={product.image} alt={product.name} className="product-image" />
                   <div className="product-info">
                     <p className="product-name">{product.name}</p>
-                    <p className="product-price">₱{product.price.toFixed(2)}</p>
+                    <div className="product-bottom">
+                      <p className="product-price">₱{product.price.toFixed(2)}</p>
+                      <button
+                        className="product-add"
+                        onClick={() => addToCart(product)}
+                        aria-label={`Add ${product.name} to cart`}
+                      >
+                        <IonIcon icon={addOutline} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

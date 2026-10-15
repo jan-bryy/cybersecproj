@@ -125,33 +125,23 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* Live + Video, one row */}
+        {/* Live + Video */}
         <section className="home-section">
-          <div className="home-media-row">
-            <div className="media-col">
-              <h3 className="section-title"><span className="live-dot" /> Live now</h3>
-              <div className="media-cards">
-                {MOCK_LIVE.map((l) => (
-                  <div className="media-card" key={l.id}>
-                    <video src={l.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
-                    <span className="live-badge">LIVE</span>
-                    <p className="live-caption">{l.title}</p>
-                  </div>
-                ))}
+          <h3 className="section-title"><span className="live-dot" /> Live &amp; trending</h3>
+          <div className="media-rail">
+            {MOCK_LIVE.map((l) => (
+              <div className="media-card" key={l.id}>
+                <video src={l.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
+                <span className="live-badge">LIVE</span>
+                <p className="live-caption">{l.title}</p>
               </div>
-            </div>
-
-            <div className="media-col">
-              <h3 className="section-title">Videos</h3>
-              <div className="media-cards">
-                {MOCK_VIDEOS.map((v) => (
-                  <div className="media-card" key={v.id}>
-                    <video src={v.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
-                    <span className="video-views"><IonIcon icon={playOutline} /> {v.views}</span>
-                  </div>
-                ))}
+            ))}
+            {MOCK_VIDEOS.map((v) => (
+              <div className="media-card" key={v.id}>
+                <video src={v.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
+                <span className="video-views"><IonIcon icon={playOutline} /> {v.views}</span>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
