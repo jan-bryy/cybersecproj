@@ -13,7 +13,7 @@ import {
   phonePortraitOutline,
 } from 'ionicons/icons';
 import { useLogout } from '../hooks/useLogout';
-import { deleteAccount, getDeviceConsent, setDeviceConsent } from '../api/account';
+import { deleteAccount, getDeviceConsent, setDeviceConsent, SecondFactor } from '../api/account';
 import { ApiError, NetworkError } from '../api/client';
 import DeleteAccountModal, { CONFIRM_PHRASE } from '../components/DeleteAccountModal';
 import './SettingsPage.css';
@@ -75,31 +75,36 @@ const SettingsPage: React.FC = () => {
     setDeleteError('');
   };
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (second: SecondFactor) => {
     if (isDeleting) return;
     setDeleteError('');
     setIsDeleting(true);
 
     try {
-      await deleteAccount(CONFIRM_PHRASE);
+      await deleteAccount(CONFIRM_PHRASE, second);
 
       setShowDelete(false);
       await logoutAndClearCart();
       ionRouter.push('/login', 'root', 'replace');
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 401) {
-        // Session already ended: SessionWatcher logs out and clears the cart
-        setShowDelete(false);
-        return;
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          // Session already ended: SessionWatcher logs out and clears the cart
+          setShowDelete(false);
+          return;
+        }
+
+        if (err instanceof ApiError && err.status === 400) {
+          setDeleteError('Incorrect code. Please try again.');
+        } else if (err instanceof ApiError && err.status === 429) {
+          setDeleteError('Too many attempts. Please try again later.');
+        } else if (err instanceof NetworkError) {
+          setDeleteError('No internet connection. Your account was not deleted.');
+        } else {
+          setDeleteError('Something went wrong. Your account was not deleted.');
+        }
+      } finally {
+        setIsDeleting(false);
       }
-      if (err instanceof NetworkError) {
-        setDeleteError('No internet connection. Your account was not deleted.');
-      } else {
-        setDeleteError('Something went wrong. Your account was not deleted.');
-      }
-    } finally {
-      setIsDeleting(false);
-    }
   };
 
   return (

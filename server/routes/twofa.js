@@ -347,4 +347,6 @@ router.post("/unlock", unlockLimiter, async (req, res) => {
   }
 });
 
+router.checkSecondFactor = checkSecondFactor;
+
 module.exports = router;

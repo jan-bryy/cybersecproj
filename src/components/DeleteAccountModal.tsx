@@ -1,6 +1,7 @@
 // src/components/DeleteAccountModal.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IonModal } from '@ionic/react';
+import type { SecondFactor } from '../api/account';
 import './DeleteAccountModal.css';
 
 export const CONFIRM_PHRASE = 'delete-account';
@@ -10,7 +11,7 @@ interface DeleteAccountModalProps {
   isDeleting: boolean;
   error: string;
   onKeep: () => void;
-  onConfirm: () => void;
+  onConfirm: (second: SecondFactor) => void;
 }
 
 const TrashIcon: React.FC = () => (
@@ -38,19 +39,36 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   onKeep,
   onConfirm,
 }) => {
-  const [step, setStep] = useState<'warn' | 'confirm'>('warn');
+  const [step, setStep] = useState<'warn' | 'confirm' | 'code'>('warn');
   const [typed, setTyped] = useState('');
+  const [codeInput, setCodeInput] = useState('');
+  const [useRecovery, setUseRecovery] = useState(false);
 
   const reset = () => {
     setStep('warn');
     setTyped('');
+    setCodeInput('');
+    setUseRecovery(false);
   };
 
-  const matches = typed.trim() === CONFIRM_PHRASE;
+  // A wrong code comes back as an error: clear the field so they can retype
+  useEffect(() => {
+    if (error) setCodeInput('');
+  }, [error]);
 
-  const submit = (e: React.FormEvent) => {
+  const matches = typed.trim() === CONFIRM_PHRASE;
+  const codeValid = useRecovery ? codeInput.trim().length > 0 : /^\d{6}$/.test(codeInput);
+
+  const submitPhrase = (e: React.FormEvent) => {
     e.preventDefault();
-    if (matches && !isDeleting) onConfirm();
+    if (matches) setStep('code');
+  };
+
+  const submitCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!codeValid || isDeleting) return;
+    const value = codeInput.trim();
+    onConfirm(useRecovery ? { recoveryCode: value } : { code: value });
   };
 
   return (
@@ -70,7 +88,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
           <TrashIcon />
         </div>
 
-        {step === 'warn' ? (
+        {step === 'warn' && (
           <>
             <h2 id="delete-title" className="delete-title">
               Are you sure you want to delete your account?
@@ -94,8 +112,10 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               Permanently Delete
             </button>
           </>
-        ) : (
-          <form onSubmit={submit}>
+        )}
+
+        {step === 'confirm' && (
+          <form onSubmit={submitPhrase}>
             <h2 id="delete-title" className="delete-title">
               Confirm account deletion
             </h2>
@@ -114,7 +134,46 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
+            />
+
+            <button type="submit" className="delete-btn-filled delete-btn-danger" disabled={!matches}>
+              Continue
+            </button>
+            <button type="button" className="delete-btn-text" onClick={onKeep}>
+              Cancel
+            </button>
+          </form>
+        )}
+
+        {step === 'code' && (
+          <form onSubmit={submitCode}>
+            <h2 id="delete-title" className="delete-title">
+              Verify it&apos;s you
+            </h2>
+            <p className="delete-text">
+              {useRecovery
+                ? 'Enter one of your recovery codes. Each one works only once.'
+                : 'Enter the 6-digit code from your authenticator app to delete your account.'}
+            </p>
+
+            <input
+              className="delete-input delete-code-input"
+              type="text"
+              inputMode={useRecovery ? 'text' : 'numeric'}
+              autoComplete="one-time-code"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              maxLength={useRecovery ? 11 : 6}
+              placeholder={useRecovery ? 'xxxxx-xxxxx' : '000000'}
+              value={codeInput}
+              onChange={(e) =>
+                setCodeInput(
+                  useRecovery ? e.target.value : e.target.value.replace(/\D/g, '').slice(0, 6),
+                )
+              }
               disabled={isDeleting}
+              autoFocus
             />
 
             {error && (
@@ -123,8 +182,23 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
               </p>
             )}
 
-            <button type="submit" className="delete-btn-filled" disabled={!matches || isDeleting}>
+            <button
+              type="submit"
+              className="delete-btn-filled delete-btn-danger"
+              disabled={!codeValid || isDeleting}
+            >
               {isDeleting ? 'Deleting...' : 'Delete Account'}
+            </button>
+            <button
+              type="button"
+              className="delete-btn-text"
+              disabled={isDeleting}
+              onClick={() => {
+                setUseRecovery(!useRecovery);
+                setCodeInput('');
+              }}
+            >
+              {useRecovery ? 'Use authenticator code' : 'Use a recovery code'}
             </button>
             <button type="button" className="delete-btn-text" onClick={onKeep} disabled={isDeleting}>
               Cancel
