@@ -1,8 +1,8 @@
 // src/pages/SearchPage.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IonPage, IonContent, IonIcon, IonBadge, IonSkeletonText } from '@ionic/react';
-import { arrowBackOutline, searchOutline } from 'ionicons/icons';
+import { IonPage, IonContent, IonIcon, IonSkeletonText } from '@ionic/react';
+import { arrowBackOutline, searchOutline, closeCircle, addOutline } from 'ionicons/icons';
 import { Product, useCart } from '../context/CartContext';
 import { fetchProducts } from '../api/products';
 import './SearchPage.css';
@@ -46,23 +46,37 @@ const SearchPage: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="search-content page-enter">
-        <div className="search-header">
-          <IonIcon icon={arrowBackOutline} className="search-back-icon" onClick={() => navigate(-1)} />
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            autoFocus
-          />
-          <IonIcon icon={searchOutline} className="search-go-icon" />
-        </div>
+        <header className="search-header">
+          <button className="search-back-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <IonIcon icon={arrowBackOutline} />
+          </button>
+          <div className="search-field">
+            <IonIcon icon={searchOutline} className="search-field-icon" />
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search products"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              autoFocus
+            />
+            {query && (
+              <button className="search-clear" onClick={() => setQuery('')} aria-label="Clear search">
+                <IonIcon icon={closeCircle} />
+              </button>
+            )}
+          </div>
+        </header>
 
-        <div className="search-suggestions">
-          <p className="search-suggestions-title">
-            {term ? `Results for "${query.trim()}"` : 'Search Suggestions'}
-          </p>
+        <section className="search-results">
+          <div className="search-results-head">
+            <h3 className="search-results-title">
+              {term ? `Results for "${query.trim()}"` : 'Browse all'}
+            </h3>
+            {status === 'ready' && (
+              <span className="search-results-count">{visible.length} items</span>
+            )}
+          </div>
 
           {status === 'loading' && (
             <div className="product-grid">
@@ -88,20 +102,36 @@ const SearchPage: React.FC = () => {
           )}
 
           {status === 'ready' && visible.length === 0 && (
-            <p className="search-status">No products found.</p>
+            <div className="search-empty">
+              <span className="search-empty-icon"><IonIcon icon={searchOutline} /></span>
+              <p className="search-empty-title">No products found</p>
+              <p className="search-empty-sub">Try a different keyword or check the spelling.</p>
+            </div>
           )}
 
           {status === 'ready' && visible.length > 0 && (
-            <div className="search-suggestions-grid">
+            <div className="product-grid">
               {visible.map((product) => (
-                <div className="suggestion-card" key={product.id} onClick={() => addToCart(product)}>
-                  <img src={product.image} alt={product.name} />
-                  <p className="suggestion-name">{product.name}</p>
+                <div className="product-card" key={product.id}>
+                  <div className="product-image-wrap">
+                    <img src={product.image} alt={product.name} className="product-image" />
+                    <button
+                      className="product-add"
+                      onClick={() => addToCart(product)}
+                      aria-label={`Add ${product.name} to cart`}
+                    >
+                      <IonIcon icon={addOutline} />
+                    </button>
+                  </div>
+                  <div className="product-info">
+                    <p className="product-name">{product.name}</p>
+                    <p className="product-price">₱{product.price.toFixed(2)}</p>
+                  </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
+        </section>
       </IonContent>
     </IonPage>
   );

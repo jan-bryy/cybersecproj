@@ -1,95 +1,162 @@
-/* src/pages/SearchPage.css */
+/* src/pages/SearchPage.css (product-grid / product-card styles come from Home.css) */
 .search-content {
-  --background: #ffffff;
+  --background: var(--color-bg);
 }
 
+/* Sticky glass header */
 .search-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 12px) 12px 12px;
-  padding: 10px 14px;
-  border-radius: 24px;
-  background: white;
-  border: 1.5px solid #000;
+  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top, 0px)) + 10px) 16px 10px;
+  background: rgba(246, 248, 252, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.search-back-icon {
+.search-back-btn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
   font-size: 20px;
-  color: #333;
+  box-shadow: 0 4px 14px rgba(15, 31, 92, 0.08);
+}
+
+.search-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 12px 0 14px;
+  background: var(--color-surface);
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(15, 31, 92, 0.08);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-field:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.search-field-icon {
+  font-size: 18px;
+  color: var(--color-muted);
   flex-shrink: 0;
 }
 
 .search-input {
   flex: 1;
+  min-width: 0;
   border: none;
   outline: none;
-  font-size: 15px;
-  color: #333;
   background: transparent;
+  color: var(--color-text);
+  font-size: 15px;
   color-scheme: light;
 }
 
 .search-input::placeholder {
-  color: #bbb;
+  color: var(--color-muted);
 }
 
-.search-go-icon {
-  font-size: 18px;
-  color: #999;
-  flex-shrink: 0;
+.search-clear {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font-size: 20px;
 }
 
-.search-suggestions {
-  padding: 16px 12px;
+/* Results */
+.search-results {
+  padding: 4px 0 8px;
 }
 
-.search-suggestions-title {
-  font-weight: 700;
-  font-size: 15px;
-  margin: 0 0 12px;
+.search-results-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 16px 10px;
 }
 
-.search-suggestions-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.suggestion-card {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.suggestion-card img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
-.suggestion-name {
-  padding: 8px;
-  font-size: 13px;
-  text-align: center;
+.search-results-title {
   margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.search-results-count {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+/* States */
 .search-status {
-  text-align: center;
   padding: 32px 16px;
-  color: #757575;
+  text-align: center;
+  color: var(--color-muted);
   font-size: 13px;
 }
 
 .search-retry {
   margin-top: 8px;
-  background: #ee4d2d;
-  color: white;
+  padding: 9px 22px;
   border: none;
-  border-radius: 6px;
-  padding: 8px 20px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
   font-size: 12px;
   font-weight: 600;
+}
+
+.search-empty {
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.search-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 28px;
+}
+
+.search-empty-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.search-empty-sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
 }

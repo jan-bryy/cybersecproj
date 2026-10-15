@@ -7,6 +7,7 @@ import {
   chevronForwardOutline,
   cartOutline,
   ticketOutline,
+  storefrontOutline,
 } from 'ionicons/icons';
 import { CartItem, useCart } from '../context/CartContext';
 import './Cart.css';
@@ -23,7 +24,7 @@ const Cart: React.FC = () => {
   const groups = useMemo(() => {
     const map = new Map<string, CartItem[]>();
     for (const item of items) {
-      const shop = item.shop ?? 'Shopee';
+      const shop = item.shop ?? 'VyShop';
       map.set(shop, [...(map.get(shop) ?? []), item]);
     }
     return [...map.entries()];
@@ -54,9 +55,11 @@ const Cart: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className="cart-content">
-        <div className="cart-header">
-          <IonIcon icon={arrowBackOutline} className="cart-back" onClick={() => navigate(-1)} />
+      <IonContent className="cart-content page-enter">
+        <header className="cart-header">
+          <button className="cart-back-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <IonIcon icon={arrowBackOutline} />
+          </button>
           <span className="cart-title">
             Shopping Cart{items.length > 0 && <small> ({items.length})</small>}
           </span>
@@ -65,15 +68,17 @@ const Cart: React.FC = () => {
               {editMode ? 'Done' : 'Edit'}
             </button>
           )}
-        </div>
+        </header>
 
         {items.length === 0 ? (
           <div className="cart-empty">
-            <IonIcon icon={cartOutline} className="cart-empty-icon" />
-            <p className="cart-empty-title">Oops, Your Shopping Cart is Empty</p>
-            <p className="cart-empty-sub">Browse our awesome deals now!</p>
+            <span className="cart-empty-icon-wrap">
+              <IonIcon icon={cartOutline} className="cart-empty-icon" />
+            </span>
+            <p className="cart-empty-title">Your cart is empty</p>
+            <p className="cart-empty-sub">Browse our latest deals and add something you like.</p>
             <button className="cart-shop-btn" onClick={() => navigate('/app/home')}>
-              Go Shopping Now
+              Start shopping
             </button>
           </div>
         ) : (
@@ -90,6 +95,7 @@ const Cart: React.FC = () => {
                     checked={shopAll}
                     onChange={() => setMany(ids, !shopAll)}
                   />
+                  <IonIcon icon={storefrontOutline} className="cart-shop-icon" />
                   <span className="cart-shop-name">{shop}</span>
                   <IonIcon icon={chevronForwardOutline} className="cart-shop-chevron" />
                 </div>
@@ -106,8 +112,9 @@ const Cart: React.FC = () => {
                     <img src={item.image} alt={item.name} className="cart-item-img" />
                     <div className="cart-item-info">
                       <p className="cart-item-name">{item.name}</p>
-                      <div className="cart-item-variant-row">
-                        <span className="cart-item-variant">{item.variant ?? ''}</span>
+                      {item.variant && <span className="cart-item-variant">{item.variant}</span>}
+                      <div className="cart-item-bottom">
+                        <p className="cart-item-price">{peso(item.price)}</p>
                         <div className="cart-qty">
                           <button
                             aria-label="Decrease quantity"
@@ -126,7 +133,6 @@ const Cart: React.FC = () => {
                           </button>
                         </div>
                       </div>
-                      <p className="cart-item-price">{peso(item.price)}</p>
                     </div>
                   </div>
                 ))}
@@ -143,11 +149,11 @@ const Cart: React.FC = () => {
       </IonContent>
 
       {items.length > 0 && (
-        <IonFooter className="cart-footer ion-no-border">
+        <IonFooter className="ion-no-border">
           <div className="cart-footer">
             <div className="cart-footer-voucher">
               <IonIcon icon={ticketOutline} className="cart-voucher-icon" />
-              <span>Shopee Vouchers</span>
+              <span>VyShop Vouchers</span>
               <span className="cart-footer-voucher-cta">
                 Select or enter code <IonIcon icon={chevronForwardOutline} />
               </span>
@@ -166,7 +172,7 @@ const Cart: React.FC = () => {
 
               {editMode ? (
                 <button
-                  className="cart-checkout-btn"
+                  className="cart-checkout-btn cart-delete-btn"
                   disabled={selectedItems.length === 0}
                   onClick={deleteSelected}
                 >
@@ -174,13 +180,16 @@ const Cart: React.FC = () => {
                 </button>
               ) : (
                 <>
-                  <span className="cart-footer-total">{peso(selectedTotal)}</span>
+                  <div className="cart-footer-total-wrap">
+                    <span className="cart-footer-total-label">Total</span>
+                    <span className="cart-footer-total">{peso(selectedTotal)}</span>
+                  </div>
                   <button
                     className="cart-checkout-btn"
                     disabled={selectedItems.length === 0}
                     onClick={checkout}
                   >
-                    Check Out ({selectedCount})
+                    Check out ({selectedCount})
                   </button>
                 </>
               )}

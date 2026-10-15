@@ -125,30 +125,33 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* Live rail */}
+        {/* Live + Video, one row */}
         <section className="home-section">
-          <h3 className="section-title"><span className="live-dot" /> Live now</h3>
-          <div className="rail">
-            {MOCK_LIVE.map((l) => (
-              <div className="rail-card" key={l.id}>
-                <video src={l.src} autoPlay muted loop playsInline preload="auto" className="rail-video" />
-                <span className="live-badge">LIVE</span>
-                <p className="live-caption">{l.title}</p>
+          <div className="home-media-row">
+            <div className="media-col">
+              <h3 className="section-title"><span className="live-dot" /> Live now</h3>
+              <div className="media-cards">
+                {MOCK_LIVE.map((l) => (
+                  <div className="media-card" key={l.id}>
+                    <video src={l.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
+                    <span className="live-badge">LIVE</span>
+                    <p className="live-caption">{l.title}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
 
-        {/* Video rail */}
-        <section className="home-section">
-          <h3 className="section-title">Trending videos</h3>
-          <div className="rail">
-            {MOCK_VIDEOS.map((v) => (
-              <div className="rail-card" key={v.id}>
-                <video src={v.src} autoPlay muted loop playsInline preload="auto" className="rail-video" />
-                <span className="video-views"><IonIcon icon={playOutline} /> {v.views}</span>
+            <div className="media-col">
+              <h3 className="section-title">Videos</h3>
+              <div className="media-cards">
+                {MOCK_VIDEOS.map((v) => (
+                  <div className="media-card" key={v.id}>
+                    <video src={v.src} autoPlay muted loop playsInline preload="auto" className="media-video" />
+                    <span className="video-views"><IonIcon icon={playOutline} /> {v.views}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </section>
 
@@ -183,19 +186,19 @@ const Home: React.FC = () => {
             <div className="product-grid">
               {products.map((product) => (
                 <div className="product-card" key={product.id}>
-                  <div className="product-image-wrap">
-                    <img src={product.image} alt={product.name} className="product-image" />
-                    <button
-                      className="product-add"
-                      onClick={() => addToCart(product)}
-                      aria-label={`Add ${product.name} to cart`}
-                    >
-                      <IonIcon icon={addOutline} />
-                    </button>
-                  </div>
+                  <img src={product.image} alt={product.name} className="product-image" />
                   <div className="product-info">
                     <p className="product-name">{product.name}</p>
-                    <p className="product-price">₱{product.price.toFixed(2)}</p>
+                    <div className="product-bottom">
+                      <p className="product-price">₱{product.price.toFixed(2)}</p>
+                      <button
+                        className="product-add"
+                        onClick={() => addToCart(product)}
+                        aria-label={`Add ${product.name} to cart`}
+                      >
+                        <IonIcon icon={addOutline} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
