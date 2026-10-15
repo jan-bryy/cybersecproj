@@ -2,7 +2,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IonPage, IonContent, IonIcon, useIonRouter, useIonViewWillEnter } from '@ionic/react';
-import { arrowBackOutline, chevronForwardOutline, logOutOutline, trashOutline } from 'ionicons/icons';
+import {
+  arrowBackOutline,
+  chevronForwardOutline,
+  logOutOutline,
+  trashOutline,
+  shieldCheckmarkOutline,
+  notificationsOutline,
+  lockClosedOutline,
+  phonePortraitOutline,
+} from 'ionicons/icons';
 import { useLogout } from '../hooks/useLogout';
 import { deleteAccount, getDeviceConsent, setDeviceConsent } from '../api/account';
 import { ApiError, NetworkError } from '../api/client';
@@ -95,30 +104,37 @@ const SettingsPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="settings-content">
-        <div className="settings-header">
-          <IonIcon icon={arrowBackOutline} className="settings-back-icon" onClick={() => navigate(-1)} />
+      <IonContent fullscreen className="settings-content page-enter">
+        <header className="settings-header">
+          <button className="settings-back-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <IonIcon icon={arrowBackOutline} />
+          </button>
           <span className="settings-title">Settings</span>
-        </div>
+        </header>
 
+        <p className="settings-group-label">Security &amp; privacy</p>
         <div className="settings-section">
-          <div className="settings-row" onClick={() => ionRouter.push('/security')}>
-            <span>Account Security</span>
-            <IonIcon icon={chevronForwardOutline} />
+          <div className="settings-row settings-row-tap" onClick={() => ionRouter.push('/security')}>
+            <span className="settings-icon"><IonIcon icon={shieldCheckmarkOutline} /></span>
+            <span className="settings-row-main">Account Security</span>
+            <IonIcon icon={chevronForwardOutline} className="settings-chevron" />
+          </div>
+          <div className="settings-row settings-row-tap">
+            <span className="settings-icon"><IonIcon icon={notificationsOutline} /></span>
+            <span className="settings-row-main">Notifications</span>
+            <IonIcon icon={chevronForwardOutline} className="settings-chevron" />
+          </div>
+          <div className="settings-row settings-row-tap">
+            <span className="settings-icon"><IonIcon icon={lockClosedOutline} /></span>
+            <span className="settings-row-main">Privacy</span>
+            <IonIcon icon={chevronForwardOutline} className="settings-chevron" />
           </div>
           <div className="settings-row">
-            <span>Notifications</span>
-            <IonIcon icon={chevronForwardOutline} />
-          </div>
-          <div className="settings-row">
-            <span>Privacy</span>
-            <IonIcon icon={chevronForwardOutline} />
-          </div>
-          <div className="settings-row">
+            <span className="settings-icon"><IonIcon icon={phonePortraitOutline} /></span>
             <div className="settings-row-text">
-              <span>Device security check</span>
+              <span className="settings-row-main">Device security check</span>
               <span className="settings-row-sub">
-                Lets Shopee check this device to spot unusual logins
+                Lets VyShop check this device to spot unusual logins
               </span>
             </div>
             <button
@@ -138,17 +154,15 @@ const SettingsPage: React.FC = () => {
           )}
         </div>
 
+        <p className="settings-group-label">Account</p>
         <div className="settings-section">
-          <div className="settings-row settings-row-danger" onClick={() => setShowDelete(true)}>
-            <IonIcon icon={trashOutline} />
-            <span>Delete Account</span>
+          <div className="settings-row settings-row-tap settings-row-danger" onClick={() => setShowDelete(true)}>
+            <span className="settings-icon settings-icon-danger"><IonIcon icon={trashOutline} /></span>
+            <span className="settings-row-main">Delete Account</span>
           </div>
-        </div>
-
-        <div className="settings-section">
-          <div className="settings-row settings-row-logout" onClick={handleLogout}>
-            <IonIcon icon={logOutOutline} />
-            <span>Log Out</span>
+          <div className="settings-row settings-row-tap" onClick={handleLogout}>
+            <span className="settings-icon settings-icon-dark"><IonIcon icon={logOutOutline} /></span>
+            <span className="settings-row-main">Log Out</span>
           </div>
         </div>
 

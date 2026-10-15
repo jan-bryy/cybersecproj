@@ -2,7 +2,16 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { IonPage, IonContent, IonIcon } from '@ionic/react';
-import { arrowBackOutline, checkmarkCircle } from 'ionicons/icons';
+import {
+  arrowBackOutline,
+  checkmarkCircle,
+  checkmark,
+  cashOutline,
+  cardOutline,
+  walletOutline,
+  businessOutline,
+  carOutline,
+} from 'ionicons/icons';
 import { useCart } from '../context/CartContext';
 import { placeOrder, isCheckoutRejected, PaymentMethod } from '../api/orders';
 import { ApiError, NetworkError } from '../api/client';
@@ -83,21 +92,30 @@ const CheckoutPage: React.FC = () => {
   if (placed) {
     return (
       <IonPage>
-        <IonContent fullscreen className="checkout-content">
+        <IonContent fullscreen className="checkout-content page-enter">
           <div className="checkout-success">
-            <IonIcon icon={checkmarkCircle} className="checkout-success-icon" />
-            <h2>Order Placed!</h2>
-            <p>Order #{placed.orderId}</p>
-            <p>
-              {placed.method === 'card'
-                ? `Paid ${peso(placed.total)} by card.`
-                : `Pay ${peso(placed.total)} on delivery.`}
-            </p>
+            <span className="checkout-success-circle">
+              <IonIcon icon={checkmarkCircle} className="checkout-success-icon" />
+            </span>
+            <h2>Order placed!</h2>
+            <p className="checkout-success-sub">Thanks for shopping with VyShop.</p>
+
+            <div className="checkout-success-card">
+              <div className="checkout-row">
+                <span>Order number</span>
+                <strong>#{placed.orderId}</strong>
+              </div>
+              <div className="checkout-row">
+                <span>{placed.method === 'card' ? 'Paid by card' : 'Pay on delivery'}</span>
+                <strong>{peso(placed.total)}</strong>
+              </div>
+            </div>
+
             <button
-              className="checkout-place-btn"
+              className="checkout-place-btn checkout-success-btn"
               onClick={() => navigate('/app/home', { replace: true })}
             >
-              Continue Shopping
+              Continue shopping
             </button>
           </div>
         </IonContent>
@@ -106,16 +124,19 @@ const CheckoutPage: React.FC = () => {
   }
 
   const total = totalPrice + SHIPPING_FEE;
-
   return (
     <IonPage>
-      <IonContent fullscreen className="checkout-content">
-        <div className="checkout-header">
-          <IonIcon icon={arrowBackOutline} className="checkout-back" onClick={() => navigate(-1)} />
+      <IonContent fullscreen className="checkout-content page-enter">
+        <header className="checkout-header">
+          <button className="checkout-back-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <IonIcon icon={arrowBackOutline} />
+          </button>
           <span className="checkout-title">Checkout</span>
-        </div>
+        </header>
 
+        {/* Order summary */}
         <div className="checkout-card">
+          <p className="checkout-label">Order summary</p>
           {items.map((item) => (
             <div className="checkout-item" key={item.id}>
               <img src={item.image} alt={item.name} className="checkout-item-img" />
@@ -123,29 +144,31 @@ const CheckoutPage: React.FC = () => {
                 <p className="checkout-item-name">{item.name}</p>
                 <p className="checkout-item-price">{peso(item.price)}</p>
               </div>
-              <span className="checkout-item-qty">x{item.quantity}</span>
+              <span className="checkout-item-qty">×{item.quantity}</span>
             </div>
           ))}
 
           <div className="checkout-shipping">
-            <p className="checkout-label">Shipping Option</p>
+            <p className="checkout-label">Shipping option</p>
             <div className="checkout-shipping-option">
-              <div>
+              <span className="checkout-pay-icon"><IonIcon icon={carOutline} /></span>
+              <div className="checkout-shipping-text">
                 <strong>Standard Local</strong>
                 <p>Arrives in 3-7 days</p>
               </div>
-              <span>{peso(SHIPPING_FEE)}</span>
+              <span className="checkout-shipping-fee">{peso(SHIPPING_FEE)}</span>
             </div>
           </div>
 
           <div className="checkout-row checkout-row-total">
-            <span>Total {totalItems} Item(s)</span>
+            <span>Total {totalItems} item(s)</span>
             <strong>{peso(total)}</strong>
           </div>
         </div>
 
+        {/* Payment methods */}
         <div className="checkout-card">
-          <p className="checkout-label">Payment Methods</p>
+          <p className="checkout-label">Payment method</p>
 
           <div
             className="checkout-pay-row checkout-pay-option"
@@ -154,9 +177,10 @@ const CheckoutPage: React.FC = () => {
             tabIndex={0}
             onClick={() => setPaymentMethod('cod')}
           >
-            <span>Cash on Delivery</span>
+            <span className="checkout-pay-icon"><IonIcon icon={cashOutline} /></span>
+            <span className="checkout-pay-name">Cash on Delivery</span>
             <span className={paymentMethod === 'cod' ? 'checkout-check' : 'checkout-radio'}>
-              {paymentMethod === 'cod' ? '✓' : ''}
+              {paymentMethod === 'cod' && <IonIcon icon={checkmark} />}
             </span>
           </div>
 
@@ -167,9 +191,10 @@ const CheckoutPage: React.FC = () => {
             tabIndex={0}
             onClick={() => setPaymentMethod('card')}
           >
-            <span>Credit / Debit Card</span>
+            <span className="checkout-pay-icon"><IonIcon icon={cardOutline} /></span>
+            <span className="checkout-pay-name">Credit / Debit Card</span>
             <span className={paymentMethod === 'card' ? 'checkout-check' : 'checkout-radio'}>
-              {paymentMethod === 'card' ? '✓' : ''}
+              {paymentMethod === 'card' && <IonIcon icon={checkmark} />}
             </span>
           </div>
 
@@ -193,27 +218,30 @@ const CheckoutPage: React.FC = () => {
           )}
 
           <div className="checkout-pay-row checkout-pay-disabled">
-            <span>ShopeePay / SPayLater</span>
+            <span className="checkout-pay-icon"><IonIcon icon={walletOutline} /></span>
+            <span className="checkout-pay-name">VyPay / VyLater</span>
             <span className="checkout-activate">Activate</span>
           </div>
           <div className="checkout-pay-row checkout-pay-disabled">
-            <span>MariBank Savings</span>
+            <span className="checkout-pay-icon"><IonIcon icon={businessOutline} /></span>
+            <span className="checkout-pay-name">VyBank Savings</span>
             <span className="checkout-activate">Activate</span>
           </div>
         </div>
 
+        {/* Payment details */}
         <div className="checkout-card">
-          <p className="checkout-label">Payment Details</p>
+          <p className="checkout-label">Payment details</p>
           <div className="checkout-row">
-            <span>Merchandise Subtotal</span>
+            <span>Merchandise subtotal</span>
             <span>{peso(totalPrice)}</span>
           </div>
           <div className="checkout-row">
-            <span>Shipping Subtotal</span>
+            <span>Shipping subtotal</span>
             <span>{peso(SHIPPING_FEE)}</span>
           </div>
           <div className="checkout-row checkout-row-total">
-            <span>Total Payment</span>
+            <span>Total payment</span>
             <strong>{peso(total)}</strong>
           </div>
         </div>
@@ -229,10 +257,11 @@ const CheckoutPage: React.FC = () => {
         )}
         <div className="checkout-footer-row">
           <div className="checkout-footer-total">
-            Total <strong>{peso(total)}</strong>
+            <span>Total</span>
+            <strong>{peso(total)}</strong>
           </div>
           <button className="checkout-place-btn" onClick={handlePlaceOrder} disabled={isPlacing}>
-            {isPlacing ? 'Placing...' : 'Place Order'}
+            {isPlacing ? 'Placing...' : 'Place order'}
           </button>
         </div>
       </div>
