@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { IonPage, IonContent, useIonRouter } from "@ionic/react";
+import { IonPage, IonContent, IonIcon, useIonRouter } from "@ionic/react";
+import { shieldCheckmarkOutline, qrCodeOutline, keyOutline } from "ionicons/icons";
 import { useAuth } from "../context/AuthContext";
 import { ApiError, NetworkError } from "../api/client";
 import { startTwoFactorSetup, confirmTwoFactorSetup } from "../api/twofa";
@@ -108,12 +109,21 @@ const logoutLink = (
     goHome();
   };
 
+  const stepIndex = step === "intro" ? 0 : step === "scan" ? 1 : 2;
+
   return (
     <IonPage>
       <IonContent fullscreen className="login-content page-enter">
-        <div className="login-container">
+        <div className="login-container setup-container">
+          <div className="setup-steps" aria-hidden="true">
+            {[0, 1, 2].map((i) => (
+              <span key={i} className={`setup-step-dot ${i <= stepIndex ? "is-on" : ""}`} />
+            ))}
+          </div>
+
           {step === "intro" && (
             <div className="login-form">
+              <span className="setup-icon"><IonIcon icon={shieldCheckmarkOutline} /></span>
               <h2 className="login-title">Set up two-factor authentication</h2>
               <p className="login-hint">
                 To keep your account safe, we require a second step when you log in.
@@ -129,6 +139,7 @@ const logoutLink = (
 
           {step === "scan" && (
             <form className="login-form" onSubmit={handleConfirm} noValidate>
+              <span className="setup-icon"><IonIcon icon={qrCodeOutline} /></span>
               <h2 className="login-title">Scan the QR code</h2>
               <p className="login-hint">
                 Open your authenticator app, add an account, and scan this code.
@@ -159,6 +170,7 @@ const logoutLink = (
 
           {step === "recovery" && (
             <div className="login-form">
+              <span className="setup-icon"><IonIcon icon={keyOutline} /></span>
               <h2 className="login-title">Save your recovery codes</h2>
               <p className="login-hint">
                 If you lose your phone, these codes are the only way back in. Each works

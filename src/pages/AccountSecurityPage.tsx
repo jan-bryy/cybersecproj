@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IonPage, IonContent, IonIcon, useIonViewWillEnter } from "@ionic/react";
-import { arrowBackOutline } from "ionicons/icons";
+import {
+  arrowBackOutline,
+  chevronForwardOutline,
+  shieldCheckmarkOutline,
+  keyOutline,
+} from "ionicons/icons";
 import { ApiError, NetworkError } from "../api/client";
 import { getTwoFactorStatus, regenerateRecoveryCodes } from "../api/twofa";
 import "./LoginPage.css";
@@ -82,49 +87,56 @@ const AccountSecurityPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="settings-content">
-        <div className="settings-header">
+      <IonContent fullscreen className="settings-content page-enter">
+        <header className="settings-header">
           {view !== "codes" && (
-            <IonIcon
-              icon={arrowBackOutline}
-              className="settings-back-icon"
+            <button
+              className="settings-back-btn"
               onClick={() => (view === "confirm" ? setView("overview") : navigate(-1))}
-            />
+              aria-label="Back"
+            >
+              <IonIcon icon={arrowBackOutline} />
+            </button>
           )}
           <span className="settings-title">Account Security</span>
-        </div>
+        </header>
 
         {view === "overview" && (
           <div className="settings-section">
             <div className="settings-row">
+              <span className="settings-icon"><IonIcon icon={shieldCheckmarkOutline} /></span>
               <div className="settings-row-text">
-                <span>Two-factor authentication</span>
-                <span className="settings-row-sub">On. Required for your account.</span>
+                <span className="settings-row-main">Two-factor authentication</span>
+                <span className="settings-row-sub">Required for your account.</span>
               </div>
+              <span className="security-badge">On</span>
             </div>
             <div
-              className="settings-row"
+              className="settings-row settings-row-tap"
               onClick={() => {
                 setErrorMessage("");
                 setCode("");
                 setView("confirm");
               }}
             >
+              <span className="settings-icon"><IonIcon icon={keyOutline} /></span>
               <div className="settings-row-text">
-                <span>Recovery codes</span>
+                <span className="settings-row-main">Recovery codes</span>
                 <span className="settings-row-sub">
                   {remaining === null
                     ? "Loading..."
                     : `${remaining} unused. Tap to generate new ones.`}
                 </span>
               </div>
+              <IonIcon icon={chevronForwardOutline} className="settings-chevron" />
             </div>
             {errorMessage && <p className="settings-row-error" role="alert">{errorMessage}</p>}
           </div>
         )}
 
         {view === "confirm" && (
-          <form className="login-form" style={{ padding: 24 }} onSubmit={handleGenerate} noValidate>
+          <form className="login-form security-panel" onSubmit={handleGenerate} noValidate>
+            <span className="setup-icon"><IonIcon icon={keyOutline} /></span>
             <h2 className="login-title">Generate new recovery codes</h2>
             <p className="login-hint">
               Enter the 6-digit code from your authenticator app. Your old recovery codes will
@@ -149,7 +161,8 @@ const AccountSecurityPage: React.FC = () => {
         )}
 
         {view === "codes" && (
-          <div className="login-form" style={{ padding: 24 }}>
+          <div className="login-form security-panel">
+            <span className="setup-icon"><IonIcon icon={keyOutline} /></span>
             <h2 className="login-title">Save your new recovery codes</h2>
             <p className="login-hint">
               Each code works once. The old ones no longer work, and we won't show these again.
