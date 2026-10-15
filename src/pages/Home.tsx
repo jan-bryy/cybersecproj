@@ -2,7 +2,10 @@
 import { useEffect, useState } from 'react';
 import { IonPage, IonContent, IonIcon, IonBadge, IonSkeletonText } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import { searchOutline, cameraOutline, chatbubblesOutline, cartOutline } from 'ionicons/icons';
+import {
+  searchOutline, cameraOutline, chatbubblesOutline, cartOutline,
+  addOutline, walletOutline, calendarOutline, giftOutline, playOutline,
+} from 'ionicons/icons';
 import { useCart, Product } from '../context/CartContext';
 import './Home.css';
 
@@ -78,126 +81,127 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="home-content page-enter">
-        {/* Top orange header with search bar */}
-        <div className="home-header">
+        {/* Sticky header */}
+        <header className="home-header">
           <div className="home-search-bar" onClick={() => navigate('/search')}>
             <IonIcon icon={searchOutline} className="home-search-icon" />
             <span className="home-search-placeholder">Search products</span>
             <IonIcon icon={cameraOutline} className="home-camera-icon" />
           </div>
-          <div className="home-cart-icon" onClick={() => navigate('/app/cart')}>
+          <button className="home-icon-btn" onClick={() => navigate('/app/cart')} aria-label="Cart">
             <IonIcon icon={cartOutline} />
-            {totalItems > 0 && <IonBadge color="light" className="home-cart-badge">{totalItems}</IonBadge>}
-          </div>
-          <IonIcon icon={chatbubblesOutline} className="home-chat-icon" />
-        </div>
+            {totalItems > 0 && <span className="home-cart-badge">{totalItems}</span>}
+          </button>
+          <button className="home-icon-btn" aria-label="Messages">
+            <IonIcon icon={chatbubblesOutline} />
+          </button>
+        </header>
 
-        {/* Promo strip */}
-        <div className="promo-item">
-          <div className="promo-icon promo-icon-primary">V</div>
+        {/* Promo banner */}
+        <section className="home-banner">
           <div>
-            <p className="promo-title">VyPay</p>
-            <p className="promo-sub">Unlimited free transfers</p>
+            <p className="home-banner-eyebrow">New here?</p>
+            <h2 className="home-banner-title">Free shipping on your first order</h2>
           </div>
-        </div>
-        <div className="promo-item">
-          <div className="promo-icon promo-icon-accent">C</div>
-          <div>
-            <p className="promo-title">Check-in</p>
-            <p className="promo-sub">Bigger wins daily!</p>
-          </div>
-        </div>
-        <div className="promo-item">
-          <div className="promo-icon promo-icon-dark">R</div>
-          <div>
-            <p className="promo-title">VyRewards</p>
-            <p className="promo-sub">Get up to ₱1,350</p>
-          </div>
-        </div>
+          <IonIcon icon={giftOutline} className="home-banner-icon" />
+        </section>
 
-        {/* Live / Video */}
-        <div className="home-live-video-row">
-          <div className="live-video-col">
-            <p className="section-title">VYSHOP LIVE</p>
-            <div className="live-video-cards">
-              {MOCK_LIVE.map((l) => (
-                <div className="live-card" key={l.id}>
-                  <video
-                    src={l.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    style={{ width: '100%', aspectRatio: '3 / 4', objectFit: 'cover', display: 'block' }}
-                  />
-                  <span className="live-badge">LIVE</span>
-                  <p className="live-caption">{l.title}</p>
-                </div>
-              ))}
-            </div>
+        {/* Quick actions */}
+        <section className="home-quick">
+          <div className="quick-tile">
+            <span className="quick-icon quick-icon-primary"><IonIcon icon={walletOutline} /></span>
+            <p className="quick-title">VyPay</p>
+            <p className="quick-sub">Free transfers</p>
           </div>
-          <div className="live-video-col">
-            <p className="section-title">VYSHOP VIDEO</p>
-            <div className="live-video-cards">
-              {MOCK_VIDEOS.map((v) => (
-                <div className="live-card" key={v.id}>
-                  <video
-                    src={v.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    style={{ width: '100%', aspectRatio: '3 / 4', objectFit: 'cover', display: 'block' }}
-                  />
-                  <span className="video-views">▶ {v.views}</span>
-                </div>
-              ))}
-            </div>
+          <div className="quick-tile">
+            <span className="quick-icon quick-icon-accent"><IonIcon icon={calendarOutline} /></span>
+            <p className="quick-title">Check-in</p>
+            <p className="quick-sub">Daily rewards</p>
           </div>
-        </div>
+          <div className="quick-tile">
+            <span className="quick-icon quick-icon-dark"><IonIcon icon={giftOutline} /></span>
+            <p className="quick-title">VyRewards</p>
+            <p className="quick-sub">Up to ₱1,350</p>
+          </div>
+        </section>
 
-        {/* Product grid */}
-        {status === 'loading' && (
-          <div className="product-grid">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div className="product-card" key={i}>
-                <IonSkeletonText animated style={{ width: '100%', aspectRatio: '1', margin: 0 }} />
-                <div className="product-info">
-                  <IonSkeletonText animated style={{ width: '80%', height: '13px', margin: '0 0 8px' }} />
-                  <IonSkeletonText animated style={{ width: '40%', height: '15px', margin: 0 }} />
-                </div>
+        {/* Live rail */}
+        <section className="home-section">
+          <h3 className="section-title"><span className="live-dot" /> Live now</h3>
+          <div className="rail">
+            {MOCK_LIVE.map((l) => (
+              <div className="rail-card" key={l.id}>
+                <video src={l.src} autoPlay muted loop playsInline preload="auto" className="rail-video" />
+                <span className="live-badge">LIVE</span>
+                <p className="live-caption">{l.title}</p>
               </div>
             ))}
           </div>
-        )}
+        </section>
 
-        {status === 'error' && (
-          <div className="product-status" role="alert">
-            <p>Couldn't load products. Please check your connection.</p>
-            <button className="add-to-cart-btn product-retry" onClick={() => setReloadKey((k) => k + 1)}>
-              Try Again
-            </button>
-          </div>
-        )}
-
-        {status === 'ready' && (
-          <div className="product-grid">
-            {products.map((product) => (
-              <div className="product-card" key={product.id}>
-                <img src={product.image} alt={product.name} className="product-image" />
-                <div className="product-info">
-                  <p className="product-name">{product.name}</p>
-                  <p className="product-price">₱{product.price.toFixed(2)}</p>
-                  <button className="add-to-cart-btn" onClick={() => addToCart(product)}>
-                    Add to Cart
-                  </button>
-                </div>
+        {/* Video rail */}
+        <section className="home-section">
+          <h3 className="section-title">Trending videos</h3>
+          <div className="rail">
+            {MOCK_VIDEOS.map((v) => (
+              <div className="rail-card" key={v.id}>
+                <video src={v.src} autoPlay muted loop playsInline preload="auto" className="rail-video" />
+                <span className="video-views"><IonIcon icon={playOutline} /> {v.views}</span>
               </div>
             ))}
           </div>
-        )}
+        </section>
+
+        {/* Products */}
+        <section className="home-section">
+          <h3 className="section-title">Just for you</h3>
+
+          {status === 'loading' && (
+            <div className="product-grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className="product-card" key={i}>
+                  <IonSkeletonText animated style={{ width: '100%', aspectRatio: '1', margin: 0 }} />
+                  <div className="product-info">
+                    <IonSkeletonText animated style={{ width: '80%', height: '13px', margin: '0 0 8px' }} />
+                    <IonSkeletonText animated style={{ width: '40%', height: '15px', margin: 0 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="product-status" role="alert">
+              <p>Couldn't load products. Please check your connection.</p>
+              <button className="add-to-cart-btn product-retry" onClick={() => setReloadKey((k) => k + 1)}>
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {status === 'ready' && (
+            <div className="product-grid">
+              {products.map((product) => (
+                <div className="product-card" key={product.id}>
+                  <div className="product-image-wrap">
+                    <img src={product.image} alt={product.name} className="product-image" />
+                    <button
+                      className="product-add"
+                      onClick={() => addToCart(product)}
+                      aria-label={`Add ${product.name} to cart`}
+                    >
+                      <IonIcon icon={addOutline} />
+                    </button>
+                  </div>
+                  <div className="product-info">
+                    <p className="product-name">{product.name}</p>
+                    <p className="product-price">₱{product.price.toFixed(2)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </IonContent>
     </IonPage>
   );
