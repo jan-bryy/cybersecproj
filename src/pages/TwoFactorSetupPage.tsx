@@ -7,6 +7,7 @@ import { startTwoFactorSetup, confirmTwoFactorSetup } from "../api/twofa";
 import { useLogout } from "../hooks/useLogout";
 import "./LoginPage.css";
 import "./TwoFactorSetupPage.css";
+import CodeInput from "../components/CodeInput";
 
 type Step = "intro" | "scan" | "recovery";
 
