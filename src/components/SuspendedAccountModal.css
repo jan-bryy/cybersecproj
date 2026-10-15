@@ -93,13 +93,13 @@ ion-modal.suspended-modal {
   padding: 15px 12px;
   margin-bottom: 6px;
   border-radius: 999px;
-  background: var(--color-primary);
+  background: var(--color-danger);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(39, 72, 216, 0.28);
+  box-shadow: 0 6px 16px rgba(229, 72, 77, 0.28);
 }
 
 .suspended-btn-filled:active {
-  background: var(--color-primary-dark);
+  background: #c93a3f;
 }
 
 .suspended-btn-text {
