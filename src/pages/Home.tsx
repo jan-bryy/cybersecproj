@@ -93,34 +93,32 @@ const Home: React.FC = () => {
         </div>
 
         {/* Promo strip */}
-        <div className="home-promo-strip">
-          <div className="promo-item">
-            <div className="promo-icon promo-icon-orange">S</div>
-            <div>
-              <p className="promo-title">ShopeePay</p>
-              <p className="promo-sub">Unlimited free transfers</p>
-            </div>
+        <div className="promo-item">
+          <div className="promo-icon promo-icon-primary">V</div>
+          <div>
+            <p className="promo-title">VyPay</p>
+            <p className="promo-sub">Unlimited free transfers</p>
           </div>
-          <div className="promo-item">
-            <div className="promo-icon promo-icon-yellow">C</div>
-            <div>
-              <p className="promo-title">Check-in</p>
-              <p className="promo-sub">Bigger wins daily!</p>
-            </div>
+        </div>
+        <div className="promo-item">
+          <div className="promo-icon promo-icon-accent">C</div>
+          <div>
+            <p className="promo-title">Check-in</p>
+            <p className="promo-sub">Bigger wins daily!</p>
           </div>
-          <div className="promo-item">
-            <div className="promo-icon promo-icon-blue">M</div>
-            <div>
-              <p className="promo-title">MariBank</p>
-              <p className="promo-sub">Get up to ₱1,350</p>
-            </div>
+        </div>
+        <div className="promo-item">
+          <div className="promo-icon promo-icon-dark">R</div>
+          <div>
+            <p className="promo-title">VyRewards</p>
+            <p className="promo-sub">Get up to ₱1,350</p>
           </div>
         </div>
 
-        {/* Shopee Live / Video */}
+        {/* Live / Video */}
         <div className="home-live-video-row">
           <div className="live-video-col">
-            <p className="section-title">SHOPEE LIVE</p>
+            <p className="section-title">VYSHOP LIVE</p>
             <div className="live-video-cards">
               {MOCK_LIVE.map((l) => (
                 <div className="live-card" key={l.id}>
@@ -140,7 +138,7 @@ const Home: React.FC = () => {
             </div>
           </div>
           <div className="live-video-col">
-            <p className="section-title">SHOPEE VIDEO</p>
+            <p className="section-title">VYSHOP VIDEO</p>
             <div className="live-video-cards">
               {MOCK_VIDEOS.map((v) => (
                 <div className="live-card" key={v.id}>
