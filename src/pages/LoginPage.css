@@ -12,24 +12,28 @@
 }
 
 .login-logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin-bottom: 28px;
-  margin-top: 40px;
-}
-
-.login-logo-img {
-  height: 88px;
-  width: auto;
+  margin: 40px 0 32px;
 }
 
 .login-logo-bag {
-  font-size: 48px;
-  margin-bottom: 8px;
+  line-height: 0;
+  margin-bottom: 6px;
+}
+
+.login-logo-img {
+  display: block;
+  height: 72px;
+  width: auto;
 }
 
 .login-brand {
   margin: 0;
-  font-size: 28px;
+  font-size: 32px;
+  line-height: 1;
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--color-primary-dark);
