@@ -92,7 +92,7 @@ const SignUpPage: React.FC = () => {
 
         <div className="login-container signup-container">
           <div className="login-logo-wrapper signup-logo">
-            <img src="/shopeeicon.png" alt="Shopee" className="login-logo-img" />
+            <img src="/vyshop-logo.svg" alt="VyShop" className="login-logo-img" />
           </div>
 
           <div className="signup-voucher">
@@ -158,7 +158,7 @@ const SignUpPage: React.FC = () => {
           </form>
 
           <p className="signup-terms">
-            By signing up, you agree to Shopee's{" "}
+            By signing up, you agree to VyShop's{" "}
             <span className="signup-terms-link">Terms of Service</span> &amp;{" "}
             <span className="signup-terms-link">Privacy Policy</span>
           </p>
