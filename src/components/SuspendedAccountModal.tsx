@@ -63,11 +63,11 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
             <p className="suspended-info-title">What you can do</p>
             <ul>
               <li>
-                Check the email sent to your registered Shopee email address for
+                Check the email sent to your registered VyShop email address for
                 more information.
               </li>
               <li>
-                If you believe this action was made in error, contact Shopee
+                If you believe this action was made in error, contact VyShop
                 Support.
               </li>
             </ul>

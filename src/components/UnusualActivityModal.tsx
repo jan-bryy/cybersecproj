@@ -63,7 +63,7 @@ const UnusualActivityModal: React.FC<UnusualActivityModalProps> = ({
         <button type="button" className="suspended-btn-filled" onClick={onClose}>
           OK
         </button>
-        <button type="button" className="suspended-btn-text" onClick={onUnlock}>
+        <button type="button" className="suspended-btn-text suspended-btn-accent" onClick={onUnlock}>
           Unlock with 2FA
         </button>
         <button type="button" className="suspended-btn-text" onClick={() => setShowContact(true)}>

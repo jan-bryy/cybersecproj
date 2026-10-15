@@ -1,23 +1,18 @@
-/* src/components/SuspendedAccountModal.css */
+/* src/components/SuspendedAccountModal.css (also used by UnusualActivityModal) */
 ion-modal.suspended-modal {
-  --background: #fff;
+  --background: var(--color-surface);
   --width: 100%;
   --height: auto;
   --max-height: 92%;
   --border-radius: 28px 28px 0 0;
-  --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
-  --suspended-orange: #ee4d2d;
-  --suspended-orange-soft: #fdece7;
-  --suspended-text: #1f1f1f;
-  --suspended-muted: #6b6b6b;
-  align-items: flex-end;
-  /* pins the modal to the bottom as a sheet */
+  --box-shadow: 0 -8px 32px rgba(15, 31, 92, 0.18);
+  align-items: flex-end; /* pins the modal to the bottom as a sheet */
 }
 
 .suspended-modal-content {
   padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
   text-align: center;
-  color: var(--suspended-text);
+  color: var(--color-text);
 }
 
 .suspended-icon-wrapper {
@@ -28,13 +23,13 @@ ion-modal.suspended-modal {
   height: 68px;
   margin: 0 auto 18px;
   border-radius: 50%;
-  background: var(--suspended-orange-soft);
+  background: rgba(229, 72, 77, 0.12);
 }
 
 .suspended-icon {
   width: 32px;
   height: 32px;
-  color: var(--suspended-orange);
+  color: var(--color-danger);
 }
 
 .suspended-title {
@@ -42,83 +37,81 @@ ion-modal.suspended-modal {
   font-size: 20px;
   font-weight: 700;
   line-height: 1.3;
+  color: var(--color-text);
 }
 
 .suspended-description {
   margin: 0 0 22px;
   font-size: 14px;
   line-height: 1.55;
-  color: var(--suspended-muted);
+  color: var(--color-muted);
 }
 
 .suspended-info-box {
   margin-bottom: 24px;
-  padding-top: 18px;
-  border-top: 1px solid #ececec;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--color-bg);
   text-align: left;
 }
 
 .suspended-info-title {
   margin: 0 0 10px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--suspended-text);
+  color: var(--color-text);
 }
 
 .suspended-info-box ul {
-  margin: 0 0 8px;
+  margin: 0;
   padding-left: 18px;
   font-size: 14px;
   line-height: 1.5;
+  color: var(--color-text);
 }
 
-.suspended-info-box li+li {
+.suspended-info-box li + li {
   margin-top: 8px;
 }
 
 .suspended-info-box li::marker {
-  color: var(--suspended-orange);
+  color: var(--color-danger);
 }
 
-.suspended-btn-link,
 .suspended-btn-filled,
 .suspended-btn-text {
   display: block;
   width: 100%;
+  border: none;
   font-family: var(--ion-font-family, inherit);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  border: none;
-}
-
-.suspended-btn-link {
-  width: auto;
-  padding: 4px 0;
-  background: none;
-  color: var(--suspended-orange);
-  font-size: 14px;
 }
 
 .suspended-btn-filled {
-  padding: 14px 12px;
+  padding: 15px 12px;
   margin-bottom: 6px;
-  border-radius: 14px;
-  background: var(--suspended-orange);
+  border-radius: 999px;
+  background: var(--color-primary);
   color: #fff;
+  box-shadow: 0 6px 16px rgba(39, 72, 216, 0.28);
 }
 
 .suspended-btn-filled:active {
-  background: #d8451f;
+  background: var(--color-primary-dark);
 }
 
 .suspended-btn-text {
   padding: 12px;
   background: none;
-  color: var(--suspended-muted);
+  color: var(--color-muted);
 }
 
-.suspended-btn-text:active,
-.suspended-btn-link:active {
+.suspended-btn-accent {
+  color: var(--color-primary);
+}
+
+.suspended-btn-text:active {
   opacity: 0.6;
 }

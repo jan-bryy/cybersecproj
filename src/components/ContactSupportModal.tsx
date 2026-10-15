@@ -53,7 +53,7 @@ const ContactSupportModal: React.FC<ContactSupportModalProps> = ({
     if (!canSend) return;
     setStatus("sending");
     setTimeout(() => {
-      setTicketRef(`SP-${Math.floor(100000 + Math.random() * 900000)}`);
+      setTicketRef(`VY-${Math.floor(100000 + Math.random() * 900000)}`);
       setStatus("sent");
     }, 1200);
   };

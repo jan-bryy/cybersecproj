@@ -1,15 +1,11 @@
 /* src/components/SecureAccountModal.css */
 ion-modal.secure-modal {
-  --background: #fff;
+  --background: var(--color-surface);
   --width: 100%;
   --height: auto;
   --max-height: 92%;
   --border-radius: 28px 28px 0 0;
-  --box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14);
-  --secure-orange: #ee4d2d;
-  --secure-orange-soft: #fdece7;
-  --secure-text: #1f1f1f;
-  --secure-muted: #6b6b6b;
+  --box-shadow: 0 -8px 32px rgba(15, 31, 92, 0.18);
   align-items: flex-end;
 }
 
@@ -18,7 +14,7 @@ ion-modal.secure-modal {
   overflow-y: auto;
   padding: 32px 24px calc(20px + env(safe-area-inset-bottom));
   text-align: center;
-  color: var(--secure-text);
+  color: var(--color-text);
 }
 
 .secure-icon-wrapper {
@@ -29,13 +25,13 @@ ion-modal.secure-modal {
   height: 68px;
   margin: 0 auto 18px;
   border-radius: 50%;
-  background: var(--secure-orange-soft);
+  background: var(--color-primary-light);
 }
 
 .secure-icon {
   width: 32px;
   height: 32px;
-  color: var(--secure-orange);
+  color: var(--color-primary);
 }
 
 .secure-title {
@@ -43,34 +39,37 @@ ion-modal.secure-modal {
   font-size: 20px;
   font-weight: 700;
   line-height: 1.3;
+  color: var(--color-text);
 }
 
 .secure-description {
   margin: 0 0 22px;
   font-size: 14px;
   line-height: 1.55;
-  color: var(--secure-muted);
+  color: var(--color-muted);
 }
 
 .secure-info {
-  margin-bottom: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #ececec;
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--color-bg);
   text-align: left;
 }
 
 .secure-subtitle {
-  margin: 0 0 10px;
-  font-size: 16px;
+  margin: 0 0 8px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--secure-text);
+  color: var(--color-text);
 }
 
 .secure-list {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   padding-left: 18px;
   font-size: 14px;
   line-height: 1.5;
+  color: var(--color-text);
 }
 
 .secure-list:last-child {
@@ -82,7 +81,7 @@ ion-modal.secure-modal {
 }
 
 .secure-list li::marker {
-  color: var(--secure-orange);
+  color: var(--color-primary);
 }
 
 .secure-note {
@@ -90,7 +89,7 @@ ion-modal.secure-modal {
   font-size: 13px;
   line-height: 1.5;
   text-align: left;
-  color: var(--secure-muted);
+  color: var(--color-muted);
 }
 
 .secure-btn-filled,
@@ -105,21 +104,22 @@ ion-modal.secure-modal {
 }
 
 .secure-btn-filled {
-  padding: 14px 12px;
+  padding: 15px 12px;
   margin-bottom: 6px;
-  border-radius: 14px;
-  background: var(--secure-orange);
+  border-radius: 999px;
+  background: var(--color-primary);
   color: #fff;
+  box-shadow: 0 6px 16px rgba(39, 72, 216, 0.28);
 }
 
 .secure-btn-filled:active {
-  background: #d8451f;
+  background: var(--color-primary-dark);
 }
 
 .secure-btn-text {
   padding: 12px;
   background: none;
-  color: var(--secure-muted);
+  color: var(--color-muted);
 }
 
 .secure-btn-text:active {

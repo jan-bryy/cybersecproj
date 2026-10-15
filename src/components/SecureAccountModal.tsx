@@ -51,7 +51,7 @@ const SecureAccountModal: React.FC<SecureAccountModalProps> = ({
         </h2>
 
         <p id="secure-description" className="secure-description">
-          To keep your account safe, Shopee would like to check this device.
+          To keep your account safe, Vyshop would like to check this device.
         </p>
 
         <div className="secure-info">
