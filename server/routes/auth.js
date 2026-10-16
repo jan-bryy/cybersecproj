@@ -33,7 +33,15 @@ const loginLimiter = rateLimit({
   skipSuccessfulRequests: true
 });
 
-router.post("/login", loginLimiter, async (req, res) => {
+router.post("/login",
+  (req, res, next) => {
+    res.on("finish", () =>
+      console.log("login", res.statusCode, "ip:", req.ip, "xff:", req.headers["x-forwarded-for"])
+    );
+    next();
+  },
+  loginLimiter,
+  async (req, res) => {
   const { email, password } = req.body || {};
 
   if (typeof email !== "string" || typeof password !== "string") {
