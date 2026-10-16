@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 14px 12px;
+  padding: calc(14px + var(--ion-safe-area-top, env(safe-area-inset-top, 0px))) 12px 14px;
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border, #dfe5f2);
 }

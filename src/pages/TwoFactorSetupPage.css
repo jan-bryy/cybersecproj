@@ -1,6 +1,6 @@
 /* src/pages/TwoFactorSetupPage.css (also used by AccountSecurityPage) */
 .login-container.setup-container {
-  padding-top: 32px;
+  padding-top: calc(32px + var(--ion-safe-area-top, env(safe-area-inset-top, 0px)));
 }
 
 /* Progress dots */
