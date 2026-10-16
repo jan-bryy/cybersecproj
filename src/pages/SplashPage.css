@@ -1,5 +1,5 @@
 .splash-content {
-  --background: #ee4d2d;
+  --background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
 }
 
 .splash-container {
@@ -8,15 +8,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 36px;
 }
 
+/* White app-icon tile so the logo shows up whatever its colors are */
 .splash-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(7, 14, 48, 0.35);
   animation: splash-fade-in 0.6s ease-out;
 }
 
 .splash-logo-img {
-  height: 100px;
+  height: 60px;
   width: auto;
 }
 
@@ -29,19 +38,16 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: white;
-  opacity: 0.9;
+  background: var(--color-accent, #14b8a6);
   animation: splash-bounce 1.2s infinite ease-in-out both;
 }
 
 .splash-loader span:nth-child(1) {
   animation-delay: -0.24s;
 }
-
 .splash-loader span:nth-child(2) {
   animation-delay: -0.12s;
 }
-
 .splash-loader span:nth-child(3) {
   animation-delay: 0s;
 }

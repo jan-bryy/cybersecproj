@@ -54,7 +54,7 @@ const SuspendedAccountModal: React.FC<SuspendedAccountModalProps> = ({
           </h2>
 
           <p id="suspended-description" className="suspended-description">
-            We detected paranormal activities associated with your account. 
+            We detected unusual activities associated with your account. 
             To protect users and prevent further unauthorized transactions, 
             access to your account has been temporarily restricted.
           </p>

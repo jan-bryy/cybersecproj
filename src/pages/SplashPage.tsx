@@ -30,7 +30,7 @@ const SplashPage: React.FC = () => {
       <IonContent fullscreen className="splash-content">
         <div className="splash-container">
           <div className="splash-logo-wrapper">
-            <img src="/shopeeicon.png" alt="Shopee" className="splash-logo-img" />
+            <img src="/vyshop-logo.svg" alt="VyShop" className="splash-logo-img" />
           </div>
           <div className="splash-loader">
             <span></span>
