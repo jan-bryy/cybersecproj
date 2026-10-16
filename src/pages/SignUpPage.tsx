@@ -14,6 +14,7 @@ import SecureAccountModal from "../components/SecureAccountModal";
 import { useAuth } from "../context/AuthContext";
 import "./LoginPage.css"; // shared input / button / divider / social styles
 import "./SignUpPage.css";
+import { checkPassword } from "../utils/passwordPolicy";
 
 const ERROR_MESSAGES = {
   email_taken: "This email is already registered. Try logging in instead.",
@@ -35,6 +36,8 @@ const SignUpPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSecure, setShowSecure] = useState(false);
   const finished = useRef(false);
+  const rules = checkPassword(password, name, email);
+  const passwordOk = rules.every((r) => r.ok);
 
   const canSubmit = name.trim() !== "" && email.trim() !== "" && password !== "";
 
@@ -47,8 +50,8 @@ const SignUpPage: React.FC = () => {
       setErrorMessage("Please enter a valid email address.");
       return;
     }
-    if (password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters.");
+    if (!passwordOk) {
+      setErrorMessage("Your password doesn't meet all the requirements.");
       return;
     }
 
@@ -134,13 +137,23 @@ const SignUpPage: React.FC = () => {
               <input
                 className="login-input"
                 type="password"
-                autoComplete="off"
-                placeholder="Password (at least 8 characters)"
+                autoComplete="new-password"
+                placeholder="Password"
                 maxLength={72}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
+            {password && (
+              <ul className="pw-rules" aria-live="polite">
+                {rules.map((r) => (
+                  <li key={r.id} className={r.ok ? "is-ok" : ""}>
+                    {r.ok ? "✓" : "○"} {r.label}
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {errorMessage && (
               <p className="login-error" role="alert">

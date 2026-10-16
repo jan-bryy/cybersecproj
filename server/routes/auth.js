@@ -6,12 +6,27 @@ const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const pool = require("../db");
 
+const COMMON = ["password", "12345678", "qwerty", "iloveyou", "admin123", "letmein", "welcome", "abc123", "vyshop"];
+
+// Same rules as src/utils/passwordPolicy.ts on the frontend
+function passwordIsValid(password, name, email) {
+  if (typeof password !== "string") return false;
+  if (password.length < 10 || Buffer.byteLength(password, "utf8") > 72) return false;
+  if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) return false;
+  if (!/\d/.test(password) || !/[^A-Za-z0-9]/.test(password)) return false;
+  const lower = password.toLowerCase();
+  const local = String(email).split("@")[0].toLowerCase();
+  if (local.length >= 3 && lower.includes(local)) return false;
+  if (String(name).toLowerCase().split(/\s+/).some((p) => p.length >= 3 && lower.includes(p))) return false;
+  return !COMMON.some((c) => lower.includes(c));
+}
+
 // Compared against when the email doesn't exist, so timing stays similar
 const DUMMY_HASH = bcrypt.hashSync("not-a-real-password", 10);
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5, // 10 attempts per IP per 15 minutes
+  max: 5, // 5 failed attempts per IP per 15 minutes
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => res.status(429).json({ error: "locked" }),
@@ -97,11 +112,14 @@ router.post("/register", registerLimiter, async (req, res) => {
 
   if (
     cleanName.length < 1 || cleanName.length > 50 ||
-    cleanEmail.length > 254 || !EMAIL_RE.test(cleanEmail) ||
-    password.length < 8 ||
-    Buffer.byteLength(password, "utf8") > 72 // bcrypt ignores anything past 72 bytes
+    cleanEmail.length > 254 || !EMAIL_RE.test(cleanEmail)
   ) {
     return res.status(400).json({ error: "bad_request" });
+  }
+
+  // Password policy (length, mix, no name/email, not common, 72-byte bcrypt cap)
+  if (!passwordIsValid(password, cleanName, cleanEmail)) {
+    return res.status(400).json({ error: "invalid" });
   }
 
   try {
